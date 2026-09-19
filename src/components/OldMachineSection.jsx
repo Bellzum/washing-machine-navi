@@ -164,6 +164,8 @@ export default function OldMachineSection({ user, signInWithEmail, signOut, mach
               <input
                 type="number"
                 inputMode="numeric"
+                required
+                min="1"
                 className={inputClass}
                 value={form.width_mm}
                 onChange={(e) => setForm((f) => ({ ...f, width_mm: e.target.value }))}
@@ -176,6 +178,8 @@ export default function OldMachineSection({ user, signInWithEmail, signOut, mach
               <input
                 type="number"
                 inputMode="numeric"
+                required
+                min="1"
                 className={inputClass}
                 value={form.depth_mm}
                 onChange={(e) => setForm((f) => ({ ...f, depth_mm: e.target.value }))}
@@ -188,6 +192,8 @@ export default function OldMachineSection({ user, signInWithEmail, signOut, mach
               <input
                 type="number"
                 inputMode="numeric"
+                required
+                min="1"
                 className={inputClass}
                 value={form.height_mm}
                 onChange={(e) => setForm((f) => ({ ...f, height_mm: e.target.value }))}
@@ -251,25 +257,31 @@ export default function OldMachineSection({ user, signInWithEmail, signOut, mach
                     <p className="truncate text-sm font-semibold text-ink-800">
                       {m.name || "—"}
                     </p>
-                    <p className="text-xs text-ink-400">
-                      {m.width_mm || "?"}×{m.depth_mm || "?"}×{m.height_mm || "?"}mm ·{" "}
-                      {t(`fit.tap${m.tap === "single" ? "Single" : m.tap === "mixer" ? "Mixer" : "Unknown"}`)}
-                    </p>
+                    {m.width_mm && m.depth_mm && m.height_mm ? (
+                      <p className="text-xs text-ink-400">
+                        {m.width_mm}×{m.depth_mm}×{m.height_mm}mm ·{" "}
+                        {t(`fit.tap${m.tap === "single" ? "Single" : m.tap === "mixer" ? "Mixer" : "Unknown"}`)}
+                      </p>
+                    ) : (
+                      <p className="text-xs font-medium text-amber-600">{t("old.incompleteSize")}</p>
+                    )}
                     <div className="mt-1.5 flex gap-3">
-                      <button
-                        onClick={() =>
-                          onUseForFit({
-                            name: m.name,
-                            width: m.width_mm,
-                            depth: m.depth_mm,
-                            height: m.height_mm,
-                            tap: m.tap,
-                          })
-                        }
-                        className="text-xs font-medium text-sakura-600 underline underline-offset-2"
-                      >
-                        {t("old.useForFit")}
-                      </button>
+                      {m.width_mm && m.depth_mm && m.height_mm && (
+                        <button
+                          onClick={() =>
+                            onUseForFit({
+                              name: m.name,
+                              width: m.width_mm,
+                              depth: m.depth_mm,
+                              height: m.height_mm,
+                              tap: m.tap,
+                            })
+                          }
+                          className="text-xs font-medium text-sakura-600 underline underline-offset-2"
+                        >
+                          {t("old.useForFit")}
+                        </button>
+                      )}
                       <button
                         onClick={() => handleDelete(m.id)}
                         className="text-xs font-medium text-ink-400 underline underline-offset-2"

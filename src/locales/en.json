@@ -147,6 +147,7 @@
     "saveButton": "Save",
     "savedList": "Saved machines",
     "empty": "Nothing saved yet.",
+    "incompleteSize": "Size wasn't saved — please delete this and re-enter width, depth, and height.",
     "delete": "Delete",
     "useForFit": "Copy into ① fit-check",
     "signInPrompt": "Sign in to save to the cloud (without an account, this is saved only on this device).",
