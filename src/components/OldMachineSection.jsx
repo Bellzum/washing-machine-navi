@@ -5,9 +5,9 @@ import { isSupabaseConfigured } from "../lib/supabaseClient";
 const inputClass =
   "w-full rounded-xl border border-sakura-100 bg-cream-50 px-3.5 py-2.5 text-ink-800 shadow-sm outline-none transition focus:border-sakura-300 focus:ring-2 focus:ring-sakura-100";
 
-export default function OldMachineSection({ user, signInWithEmail, signOut, machines, onUseForFit }) {
+export default function OldMachineSection({ user, signInWithEmail, signOut, machines, onSave, onUseForFit }) {
   const { t } = useTranslation();
-  const { list, save, remove } = machines;
+  const { list, remove } = machines;
 
   const [form, setForm] = useState({ name: "", width_mm: "", depth_mm: "", height_mm: "", tap: "unknown" });
   const [photoFile, setPhotoFile] = useState(null);
@@ -34,7 +34,7 @@ export default function OldMachineSection({ user, signInWithEmail, signOut, mach
     e.preventDefault();
     setSaving(true);
     try {
-      await save(form, photoFile);
+      await onSave(form, photoFile);
       setForm({ name: "", width_mm: "", depth_mm: "", height_mm: "", tap: "unknown" });
       clearPhoto();
     } finally {

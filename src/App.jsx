@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Header from "./components/Header.jsx";
 import Hero from "./components/Hero.jsx";
 import FitCheckForm from "./components/FitCheckForm.jsx";
@@ -8,19 +7,10 @@ import GuideSection from "./components/GuideSection.jsx";
 import Footer from "./components/Footer.jsx";
 import { useAuth } from "./lib/useAuth";
 import { useOldMachines } from "./lib/useOldMachines";
-
-const DEFAULT_SPACE = {
-  panId: "640",
-  width: 640,
-  depth: 640,
-  height: "",
-  tap: "unknown",
-  source: null,
-  sourceName: "",
-};
+import { useSpace } from "./lib/useSpace";
 
 export default function App() {
-  const [space, setSpace] = useState(DEFAULT_SPACE);
+  const [space, setSpace] = useSpace();
   const { user, signInWithEmail, signOut } = useAuth();
   const oldMachines = useOldMachines(user);
 
@@ -43,6 +33,25 @@ export default function App() {
     }
   };
 
+  // Saving your very first old machine also sets it as your fit-check
+  // reference automatically — a sensible one-time "default" for you
+  // personally (persisted in this browser via useSpace), without touching
+  // what any other visitor sees.
+  const handleSaveOldMachine = async (form, photoFile) => {
+    const wasEmpty = oldMachines.list.length === 0;
+    const saved = await oldMachines.save(form, photoFile);
+    if (wasEmpty) {
+      applyOldMachineToFit({
+        name: saved.name,
+        width: saved.width_mm,
+        depth: saved.depth_mm,
+        height: saved.height_mm,
+        tap: saved.tap,
+      });
+    }
+    return saved;
+  };
+
   return (
     <div className="min-h-screen bg-cream-50">
       <Header />
@@ -55,6 +64,7 @@ export default function App() {
           signInWithEmail={signInWithEmail}
           signOut={signOut}
           machines={oldMachines}
+          onSave={handleSaveOldMachine}
           onUseForFit={(dims) => applyOldMachineToFit(dims, { scroll: true })}
         />
         <GuideSection />
