@@ -22,8 +22,8 @@
     "panCustom": "Enter custom size",
     "widthLabel": "Install space width (mm)",
     "depthLabel": "Install space depth (mm)",
-    "heightLabel": "Install space height (mm, optional)",
-    "heightHelp": "Only needed if there's a shelf or vent fan above limiting height. Leave blank if unsure.",
+    "heightLabel": "Ceiling / shelf clearance above (mm, optional)",
+    "heightHelp": "Only needed if there's a shelf, vent fan, or low ceiling above limiting height. For a top-load machine this should be enough room for the lid to fully open, not just the closed body — we'll flag it when a model's lid-open height isn't confirmed. Leave blank if unsure.",
     "tapLabel": "Your water tap type",
     "tapSingle": "Single tap (cold water only — most common in rentals)",
     "tapMixer": "Mixer tap (hot + cold water)",
@@ -37,7 +37,8 @@
     "useOldEmpty": "You haven't logged an old machine yet.",
     "useOldEmptyLink": "Add one below to use it here ↓",
     "useOldFallbackName": "your old machine",
-    "usingOldMachineNote": "Using {{name}}'s size as a reference — your actual space may be a little larger, so treat these results as approximate."
+    "usingOldMachineNote": "Using {{name}}'s size as a reference — your actual space may be a little larger, so treat these results as approximate.",
+    "oldMachineLidNote": "This height is your old machine's own closed body height, not a measured ceiling/shelf limit — it isn't used to check lid-open clearance. If you have a specific overhead limit, replace the height above with that number to check it."
   },
   "recommend": {
     "heading": "② Top 5 recommended for you",
@@ -95,12 +96,22 @@
       "dryMismatchHeatPump": "This model doesn't have heat-pump drying — none of the machines that fit your entered space do, so this is the closest match on everything else.",
       "dryMismatchSimple": "This model has no drying function at all — none of the machines that fit your entered space include one.",
       "typeMismatchVertical": "This is a vertical (top-load) machine rather than the drum type you selected, but it's among the few options that fit your entered space.",
-      "typeMismatchDrum": "This is a drum (front-load) machine rather than the vertical type you selected, but it's among the few options that fit your entered space."
+      "typeMismatchDrum": "This is a drum (front-load) machine rather than the vertical type you selected, but it's among the few options that fit your entered space.",
+      "lidFits": "Its lid-open height ({{mm}}mm) is confirmed to clear the ceiling/shelf limit you entered.",
+      "lidUnknown": "We couldn't confirm this model's lid-open height (the clearance needed above it for the lid to fully open) — check the manufacturer's installation manual before relying on it against your ceiling or shelf limit."
     },
     "unmet": {
       "capacity": "Heads up: none of the machines that fit your entered space reach the capacity you asked for ({{label}}). These are the largest ones that do fit — you may need a deeper or wider install space to go bigger.",
       "type": "Heads up: none of the machines that fit your entered space are {{label}} — showing the closest alternatives instead.",
       "dry": "Heads up: none of the machines that fit your entered space match your drying preference — showing the closest alternatives instead."
+    },
+    "lidCaution": "Note: some of these results don't have a confirmed lid-open height, so we couldn't fully check them against your ceiling/shelf limit — look for the ⚠️ note on each one and check the manufacturer's installation manual before buying.",
+    "delta": {
+      "heading": "Vs. your old machine ({{name}})",
+      "width": "W {{sign}}{{mm}}mm",
+      "depth": "D {{sign}}{{mm}}mm",
+      "height": "H {{sign}}{{mm}}mm",
+      "heightLidNote": " (lid open)"
     },
     "showMore": "Show all {{n}} ranked matches",
     "showLess": "Show fewer",
@@ -115,11 +126,13 @@
     "time": "Wash time",
     "timeDry": "Dry time",
     "weight": "Weight",
+    "lidOpenHeight": "Lid-open height",
     "dbValue": "{{db}} dB",
     "whValue": "{{wh}} Wh",
     "lValue": "{{l}} L",
     "minValue": "{{min}} min",
-    "kgValue": "{{kg}} kg"
+    "kgValue": "{{kg}} kg",
+    "mmValue": "{{mm}}mm"
   },
   "compare": {
     "heading": "③ Compare all machines",
@@ -157,7 +170,8 @@
     "checkStore": "Check current price",
     "yodobashi": "Search on Yodobashi.com",
     "biccamera": "View on BicCamera.com",
-    "updatedNote": "* Prices and specs are reference information as of {{date}}. Please confirm the latest details on the store page before buying."
+    "updatedNote": "* Prices and specs are reference information as of {{date}}. Please confirm the latest details on the store page before buying.",
+    "lidExceeds": "Confirmed lid-open height ({{mm}}mm) exceeds your entered ceiling/shelf limit — the lid won't fully open here even though the closed body fits."
   },
   "features": {
     "compact": "Compact design",
@@ -212,11 +226,15 @@
     "panTitle": "Measure your pan's inner size",
     "panBody": "Compare using the pan's inner (usable) dimensions, not the machine's outer size. 640×640mm is by far the most common.",
     "typeTitle": "Vertical vs. drum type",
-    "typeBody": "Vertical (top-load) machines wash powerfully, stay compact, and cost less. Drum (front-load) machines use less water and dry better, but are usually deeper.",
+    "typeBody": "Vertical (top-load) machines open from the top, wash powerfully with strong water flow, stay compact, cost less, and are usually lighter for delivery. Drum (front-load) machines open from the front, use less water, and often dry better (especially heat-pump models), but are usually deeper, heavier, pricier, and need clear floor space in front for the door to swing open. If you're replacing an old top-load machine, a top-load replacement is usually the easier, safer-fitting choice.",
     "tapTitle": "Check your tap type",
     "tapBody": "Most rentals only have a cold-water single tap. Even machines with a warm-wash feature usually run fine in normal mode on a single tap — the warm feature just won't be available.",
     "capacityTitle": "Capacity rule of thumb",
-    "capacityBody": "Living alone: 5–7kg. Couple: 7–8kg. Family of 3+: 9kg or more."
+    "capacityBody": "Living alone: 5–7kg. Couple: 7–8kg. Family of 3+: 9kg or more.",
+    "lidTitle": "Lid-open height matters too",
+    "lidBody": "For a top-load machine, what matters isn't just the closed body height — it's the extra height needed for the lid to swing fully open. If there's a shelf, vent fan, or low ceiling above your install spot, check that figure specifically, not just the body height. We flag it in the comparison whenever we don't have a confirmed number for a model.",
+    "adsTitle": "Why ads favor drum machines",
+    "adsBody": "Drum (front-load) washer-dryers cost more and market well as premium, automatic, and stylish — \"wash to dry overnight.\" That doesn't mean they're always the better pick: for many Japanese apartments, a top-load machine is cheaper, lighter, easier to install, and washes just as well. Choose based on what actually fits your space and budget, not the ad copy."
   },
   "footer": {
     "madeWith": "Made for you — and everyone else about to choose a washing machine.",

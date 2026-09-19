@@ -17,6 +17,14 @@ this locally, connect a free Supabase backend, and publish it for free.
 
 - **Apartment fit-check** — enter your pan size / install space and every
   machine in the table is flagged ◎ fits / △ tight / × too large.
+- **Lid-open height check** — for top-load machines, the closed body
+  height isn't the real constraint; enter a ceiling/shelf clearance limit
+  and machines are checked against their *lid fully open* height when
+  that figure is confirmed (and clearly flagged ⚠️ when it isn't, rather
+  than silently assuming it fits).
+- **Old-machine delta comparison** — once you're using a saved old
+  machine as your space reference, every candidate shows how its
+  footprint differs from it (e.g. "W −53mm · D −108mm · H −44mm").
 - **Top 5 (or more) recommendations** — pick your capacity/drying/type
   preferences and get a ranked shortlist (anything that won't fit your
   space is excluded outright, not just deprioritized). Each machine comes

@@ -4,6 +4,7 @@ import { recommend, DEFAULT_PREFS, TOP_SHOWN } from "../lib/recommend";
 import { yen } from "../lib/format";
 import FitBadge from "./FitBadge.jsx";
 import SpecChip from "./SpecChip.jsx";
+import DeltaBadges from "./DeltaBadges.jsx";
 
 function ChipGroup({ options, value, onChange }) {
   return (
@@ -90,10 +91,15 @@ function explainSentence(t, e) {
           ? "recommend.explain.typeMismatchVertical"
           : "recommend.explain.typeMismatchDrum",
       );
+    case "lidFits":
+      return t("recommend.explain.lidFits", { mm: e.params.mm });
+    case "lidUnknown":
+      return t("recommend.explain.lidUnknown");
     default:
       return null;
   }
 }
+
 
 function unmetMessage(t, prefs, unmet) {
   const messages = [];
@@ -119,7 +125,7 @@ export default function RecommendSection({ space }) {
 
   const setPref = (key) => (val) => setPrefs((p) => ({ ...p, [key]: val }));
 
-  const { results, unmet } = useMemo(() => recommend(space, prefs), [space, prefs]);
+  const { results, unmet, lidCaution } = useMemo(() => recommend(space, prefs), [space, prefs]);
   const shown = showAll ? results : results.slice(0, TOP_SHOWN);
   const hasMore = results.length > TOP_SHOWN;
   const unmetMessages = useMemo(() => unmetMessage(t, prefs, unmet), [t, prefs, unmet]);
@@ -178,6 +184,12 @@ export default function RecommendSection({ space }) {
               </p>
             ))}
           </div>
+        )}
+
+        {lidCaution && (
+          <p className="mt-4 rounded-2xl border border-cream-200 bg-cream-100 px-4 py-2.5 text-xs leading-relaxed text-ink-500">
+            {t("recommend.lidCaution")}
+          </p>
         )}
 
         {results.length === 0 ? (
@@ -250,8 +262,11 @@ export default function RecommendSection({ space }) {
                 {m.explain.length > 0 && (
                   <p className="rounded-2xl bg-cream-50 px-3.5 py-2.5 text-sm leading-relaxed text-ink-600">
                     {m.explain.map((e) => explainSentence(t, e)).filter(Boolean).join(" ")}
+                    {m.lidClearance === "unknown" && <span aria-hidden="true"> ⚠️</span>}
                   </p>
                 )}
+
+                <DeltaBadges t={t} delta={m.delta} />
 
                 <div className="flex flex-wrap gap-1.5">
                   <SpecChip label={t("specs.noiseSpin")} value={t("specs.dbValue", { db: m.noise_spin_db })} />
@@ -259,6 +274,12 @@ export default function RecommendSection({ space }) {
                   <SpecChip label={t("specs.water")} value={t("specs.lValue", { l: m.water_l })} />
                   <SpecChip label={t("specs.time")} value={t("specs.minValue", { min: m.time_min })} />
                   <SpecChip label={t("specs.weight")} value={t("specs.kgValue", { kg: m.weight_kg })} />
+                  {m.lid_open_height_mm != null && (
+                    <SpecChip
+                      label={t("specs.lidOpenHeight")}
+                      value={t("specs.mmValue", { mm: m.lid_open_height_mm })}
+                    />
+                  )}
                 </div>
               </li>
             ))}

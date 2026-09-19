@@ -1,10 +1,11 @@
 import { Fragment, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import machinesData from "../data/machines.json";
-import { computeFit, tapCompatible } from "../lib/fit";
+import { computeFit, tapCompatible, checkLidClearance, deltaVsOldMachine } from "../lib/fit";
 import { yen } from "../lib/format";
 import FitBadge from "./FitBadge.jsx";
 import SpecChip from "./SpecChip.jsx";
+import DeltaBadges from "./DeltaBadges.jsx";
 
 const { machines } = machinesData;
 
@@ -17,11 +18,22 @@ export default function CompareSection({ space }) {
   const [expanded, setExpanded] = useState(null);
 
   const rows = useMemo(() => {
-    let list = machines.map((m) => ({
-      ...m,
-      fit: computeFit(m, space),
-      tapNote: tapCompatible(m, space),
-    }));
+    let list = machines.map((m) => {
+      const bodyFit = computeFit(m, space);
+      const lidClearance = checkLidClearance(m, space);
+      // A confirmed lid-open failure overrides the body-height-only fit —
+      // otherwise the headline Fit badge could say "Fits ◎" for a machine
+      // whose lid can't actually open under the user's ceiling/shelf limit.
+      const fit = lidClearance === "no" ? "no" : bodyFit;
+      return {
+        ...m,
+        fit,
+        bodyFit,
+        tapNote: tapCompatible(m, space),
+        lidClearance,
+        delta: deltaVsOldMachine(m, space),
+      };
+    });
 
     if (type !== "all") list = list.filter((m) => m.type === type);
     if (onlyFit) list = list.filter((m) => m.fit === "fits" || m.fit === "tight");
@@ -193,10 +205,39 @@ export default function CompareSection({ space }) {
                               />
                             )}
                             <SpecChip label={t("specs.weight")} value={t("specs.kgValue", { kg: m.weight_kg })} />
+                            {m.lid_open_height_mm != null && (
+                              <span
+                                className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium shadow-sm ${
+                                  m.lidClearance === "no"
+                                    ? "bg-rose-100 text-rose-700"
+                                    : "bg-white text-ink-600"
+                                }`}
+                              >
+                                <span className={m.lidClearance === "no" ? "" : "text-ink-400"}>
+                                  {t("specs.lidOpenHeight")}
+                                </span>
+                                <span className="font-semibold">
+                                  {t("specs.mmValue", { mm: m.lid_open_height_mm })}
+                                </span>
+                              </span>
+                            )}
                             <SpecChip
                               label={t("compare.columns.pan")}
                               value={`${m.min_pan_mm}mm〜`}
                             />
+                          </div>
+                          {m.lidClearance === "no" && (
+                            <p className="mt-2 text-xs font-medium text-rose-600">
+                              ⚠️ {t("compare.lidExceeds", { mm: m.lid_open_height_mm })}
+                            </p>
+                          )}
+                          {m.lidClearance === "unknown" && (
+                            <p className="mt-2 text-xs font-medium text-amber-600">
+                              ⚠️ {t("recommend.explain.lidUnknown")}
+                            </p>
+                          )}
+                          <div className="mt-3">
+                            <DeltaBadges t={t} delta={m.delta} />
                           </div>
                           <div className="mt-3 flex flex-wrap gap-1.5">
                             {m.features.map((f) => (

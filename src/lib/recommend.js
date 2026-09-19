@@ -1,5 +1,5 @@
 import machinesData from "../data/machines.json";
-import { computeFit } from "./fit";
+import { computeFit, checkLidClearance, deltaVsOldMachine } from "./fit";
 
 const { machines } = machinesData;
 
@@ -30,10 +30,14 @@ export function recommend(space, prefs) {
   const candidates = machines
     .map((m) => {
       const fit = computeFit(m, space);
-      return { ...m, fit };
+      const lidClearance = checkLidClearance(m, space);
+      return { ...m, fit, lidClearance };
     })
-    // Hard-exclude anything that won't physically fit once we know the space.
-    .filter((m) => !(spaceKnown && m.fit === "no"));
+    // Hard-exclude anything that won't physically fit once we know the space,
+    // and — separately — anything whose CONFIRMED lid-open height won't clear
+    // an entered ceiling/shelf limit. A machine with an unconfirmed lid-open
+    // height is kept (we just don't know), never silently dropped.
+    .filter((m) => !(spaceKnown && m.fit === "no") && m.lidClearance !== "no");
 
   const scored = candidates.map((m) => {
     let score = 0;
@@ -162,7 +166,13 @@ export function recommend(space, prefs) {
       explain.push({ type: "premiumPick" });
     }
 
-    return { ...m, explain };
+    if (m.lidClearance === "fits") {
+      explain.push({ type: "lidFits", params: { mm: m.lid_open_height_mm } });
+    } else if (m.lidClearance === "unknown") {
+      explain.push({ type: "lidUnknown" });
+    }
+
+    return { ...m, explain, delta: deltaVsOldMachine(m, space) };
   });
 
   // If NONE of the shown results actually satisfy a stated preference, the
@@ -181,5 +191,11 @@ export function recommend(space, prefs) {
           : false,
   };
 
-  return { results, spaceKnown, totalCandidates: candidates.length, unmet };
+  // Separate from "unmet preferences" above: this flags when we had to show
+  // at least one result whose lid-open clearance we simply don't know,
+  // rather than pretending every listed machine was checked against the
+  // ceiling/shelf limit that was entered.
+  const lidCaution = results.some((m) => m.lidClearance === "unknown");
+
+  return { results, spaceKnown, totalCandidates: candidates.length, unmet, lidCaution };
 }

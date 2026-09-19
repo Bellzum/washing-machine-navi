@@ -8,6 +8,8 @@ export default function GuideSection() {
     { icon: "🌀", title: "guide.typeTitle", body: "guide.typeBody" },
     { icon: "🚰", title: "guide.tapTitle", body: "guide.tapBody" },
     { icon: "👨‍👩‍👧", title: "guide.capacityTitle", body: "guide.capacityBody" },
+    { icon: "📏", title: "guide.lidTitle", body: "guide.lidBody" },
+    { icon: "📢", title: "guide.adsTitle", body: "guide.adsBody" },
   ];
 
   return (

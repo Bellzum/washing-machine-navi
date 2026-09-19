@@ -169,12 +169,17 @@ export default function FitCheckForm({ space, setSpace, oldMachines = [], onUseO
           </div>
 
           {space.source === "old_machine" && (
-            <p className="mt-3 flex items-center gap-1.5 rounded-full bg-amber-50 px-3.5 py-2 text-xs font-medium text-amber-700">
-              <span aria-hidden="true">📏</span>
-              {t("fit.usingOldMachineNote", {
-                name: space.sourceName || t("fit.useOldFallbackName"),
-              })}
-            </p>
+            <div className="mt-3 flex flex-col gap-1.5">
+              <p className="flex items-center gap-1.5 rounded-full bg-amber-50 px-3.5 py-2 text-xs font-medium text-amber-700">
+                <span aria-hidden="true">📏</span>
+                {t("fit.usingOldMachineNote", {
+                  name: space.sourceName || t("fit.useOldFallbackName"),
+                })}
+              </p>
+              {space.height && (
+                <p className="px-3.5 text-xs text-ink-400">{t("fit.oldMachineLidNote")}</p>
+              )}
+            </div>
           )}
 
           <div className="mt-5">
