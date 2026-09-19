@@ -19,6 +19,11 @@ const inputClass =
 export default function FitCheckForm({ space, setSpace, oldMachines = [], onUseOldMachine }) {
   const { t } = useTranslation();
 
+  // Entries saved before dimensions were required (or otherwise missing
+  // one) can't usefully stand in for a space, so keep them out of this
+  // picker rather than showing a confusing "?x?x?mm" option.
+  const usableOldMachines = oldMachines.filter((m) => m.width_mm && m.depth_mm && m.height_mm);
+
   const applyPan = (panId) => {
     if (panId === "custom") {
       setSpace((s) => ({ ...s, panId, source: null }));
@@ -98,7 +103,7 @@ export default function FitCheckForm({ space, setSpace, oldMachines = [], onUseO
 
           <div className="mt-4 rounded-2xl border border-dashed border-sage-200 bg-sage-50 p-3.5">
             <p className="text-sm font-medium text-sage-700">{t("fit.useOldTitle")}</p>
-            {oldMachines.length > 0 ? (
+            {usableOldMachines.length > 0 ? (
               <>
                 <p className="mt-0.5 text-xs text-sage-600">{t("fit.useOldDescription")}</p>
                 <select
@@ -109,10 +114,9 @@ export default function FitCheckForm({ space, setSpace, oldMachines = [], onUseO
                   <option value="" disabled>
                     {t("fit.useOldSelectPlaceholder")}
                   </option>
-                  {oldMachines.map((m) => (
+                  {usableOldMachines.map((m) => (
                     <option key={m.id} value={m.id}>
-                      {(m.name ? `${m.name} — ` : "") +
-                        `${m.width_mm || "?"}×${m.depth_mm || "?"}×${m.height_mm || "?"}mm`}
+                      {(m.name ? `${m.name} — ` : "") + `${m.width_mm}×${m.depth_mm}×${m.height_mm}mm`}
                     </option>
                   ))}
                 </select>
