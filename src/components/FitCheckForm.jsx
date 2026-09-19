@@ -16,12 +16,12 @@ function Field({ label, help, children }) {
 const inputClass =
   "w-full rounded-xl border border-sakura-100 bg-cream-50 px-3.5 py-2.5 text-ink-800 shadow-sm outline-none transition focus:border-sakura-300 focus:ring-2 focus:ring-sakura-100";
 
-export default function FitCheckForm({ space, setSpace }) {
+export default function FitCheckForm({ space, setSpace, oldMachines = [], onUseOldMachine }) {
   const { t } = useTranslation();
 
   const applyPan = (panId) => {
     if (panId === "custom") {
-      setSpace((s) => ({ ...s, panId }));
+      setSpace((s) => ({ ...s, panId, source: null }));
       return;
     }
     const pan = standardPans.find((p) => p.id === panId);
@@ -30,11 +30,34 @@ export default function FitCheckForm({ space, setSpace }) {
       panId,
       width: pan.width_mm,
       depth: pan.depth_mm,
+      source: null,
     }));
   };
 
   const reset = () =>
-    setSpace({ panId: "640", width: 640, depth: 640, height: "", tap: "unknown" });
+    setSpace({
+      panId: "640",
+      width: 640,
+      depth: 640,
+      height: "",
+      tap: "unknown",
+      source: null,
+      sourceName: "",
+    });
+
+  const handlePickOldMachine = (e) => {
+    const id = e.target.value;
+    if (!id) return;
+    const m = oldMachines.find((om) => om.id === id);
+    if (!m) return;
+    onUseOldMachine({
+      name: m.name,
+      width: m.width_mm,
+      depth: m.depth_mm,
+      height: m.height_mm,
+      tap: m.tap,
+    });
+  };
 
   return (
     <section id="fit-check" className="scroll-mt-20 px-4 py-10 sm:px-6">
@@ -73,6 +96,37 @@ export default function FitCheckForm({ space, setSpace }) {
             </div>
           </Field>
 
+          <div className="mt-4 rounded-2xl border border-dashed border-sage-200 bg-sage-50 p-3.5">
+            <p className="text-sm font-medium text-sage-700">{t("fit.useOldTitle")}</p>
+            {oldMachines.length > 0 ? (
+              <>
+                <p className="mt-0.5 text-xs text-sage-600">{t("fit.useOldDescription")}</p>
+                <select
+                  className="mt-2 w-full rounded-xl border border-sage-200 bg-white px-3.5 py-2.5 text-sm text-ink-800 shadow-sm outline-none focus:border-sage-400"
+                  defaultValue=""
+                  onChange={handlePickOldMachine}
+                >
+                  <option value="" disabled>
+                    {t("fit.useOldSelectPlaceholder")}
+                  </option>
+                  {oldMachines.map((m) => (
+                    <option key={m.id} value={m.id}>
+                      {(m.name ? `${m.name} — ` : "") +
+                        `${m.width_mm || "?"}×${m.depth_mm || "?"}×${m.height_mm || "?"}mm`}
+                    </option>
+                  ))}
+                </select>
+              </>
+            ) : (
+              <p className="mt-0.5 text-xs text-sage-600">
+                {t("fit.useOldEmpty")}{" "}
+                <a href="#old-machine" className="font-semibold underline underline-offset-2">
+                  {t("fit.useOldEmptyLink")}
+                </a>
+              </p>
+            )}
+          </div>
+
           <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-3">
             <Field label={t("fit.widthLabel")}>
               <input
@@ -81,7 +135,7 @@ export default function FitCheckForm({ space, setSpace }) {
                 className={inputClass}
                 value={space.width}
                 onChange={(e) =>
-                  setSpace((s) => ({ ...s, panId: "custom", width: e.target.value }))
+                  setSpace((s) => ({ ...s, panId: "custom", width: e.target.value, source: null }))
                 }
               />
             </Field>
@@ -92,7 +146,7 @@ export default function FitCheckForm({ space, setSpace }) {
                 className={inputClass}
                 value={space.depth}
                 onChange={(e) =>
-                  setSpace((s) => ({ ...s, panId: "custom", depth: e.target.value }))
+                  setSpace((s) => ({ ...s, panId: "custom", depth: e.target.value, source: null }))
                 }
               />
             </Field>
@@ -102,11 +156,22 @@ export default function FitCheckForm({ space, setSpace }) {
                 inputMode="numeric"
                 className={inputClass}
                 value={space.height}
-                onChange={(e) => setSpace((s) => ({ ...s, height: e.target.value }))}
+                onChange={(e) =>
+                  setSpace((s) => ({ ...s, height: e.target.value, source: null }))
+                }
                 placeholder="—"
               />
             </Field>
           </div>
+
+          {space.source === "old_machine" && (
+            <p className="mt-3 flex items-center gap-1.5 rounded-full bg-amber-50 px-3.5 py-2 text-xs font-medium text-amber-700">
+              <span aria-hidden="true">📏</span>
+              {t("fit.usingOldMachineNote", {
+                name: space.sourceName || t("fit.useOldFallbackName"),
+              })}
+            </p>
+          )}
 
           <div className="mt-5">
             <Field label={t("fit.tapLabel")}>

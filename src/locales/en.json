@@ -29,7 +29,14 @@
     "tapUnknown": "Not sure",
     "resetButton": "Reset",
     "helperTitle": "What's a 防水パン (waterproof pan)?",
-    "helperBody": "A shallow tray installed under the washing machine to catch leaks. Always compare using its inner (usable) dimensions, not the outer size. Most rentals already have one installed, and 640×640mm is the most common size."
+    "helperBody": "A shallow tray installed under the washing machine to catch leaks. Always compare using its inner (usable) dimensions, not the outer size. Most rentals already have one installed, and 640×640mm is the most common size.",
+    "useOldTitle": "🧺 Not sure of your exact space?",
+    "useOldDescription": "Use one of your saved old machines as a stand-in size instead.",
+    "useOldSelectPlaceholder": "Choose a saved machine…",
+    "useOldEmpty": "You haven't logged an old machine yet.",
+    "useOldEmptyLink": "Add one below to use it here ↓",
+    "useOldFallbackName": "your old machine",
+    "usingOldMachineNote": "Using {{name}}'s size as a reference — your actual space may be a little larger, so treat these results as approximate."
   },
   "compare": {
     "heading": "② Compare washing machines",

@@ -1,17 +1,14 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { useAuth } from "../lib/useAuth";
 import { isSupabaseConfigured } from "../lib/supabaseClient";
-import { listOldMachines, saveOldMachine, deleteOldMachine } from "../lib/oldMachines";
 
 const inputClass =
   "w-full rounded-xl border border-sakura-100 bg-cream-50 px-3.5 py-2.5 text-ink-800 shadow-sm outline-none transition focus:border-sakura-300 focus:ring-2 focus:ring-sakura-100";
 
-export default function OldMachineSection({ onUseForFit }) {
+export default function OldMachineSection({ user, signInWithEmail, signOut, machines, onUseForFit }) {
   const { t } = useTranslation();
-  const { user, signInWithEmail, signOut } = useAuth();
+  const { list, save, remove } = machines;
 
-  const [list, setList] = useState([]);
   const [form, setForm] = useState({ name: "", width_mm: "", depth_mm: "", height_mm: "", tap: "unknown" });
   const [photoFile, setPhotoFile] = useState(null);
   const [photoPreview, setPhotoPreview] = useState(null);
@@ -19,10 +16,6 @@ export default function OldMachineSection({ onUseForFit }) {
   const [email, setEmail] = useState("");
   const [magicLinkSent, setMagicLinkSent] = useState(false);
   const fileInputRef = useRef(null);
-
-  useEffect(() => {
-    listOldMachines(user).then(setList).catch(() => setList([]));
-  }, [user]);
 
   const onPickPhoto = (e) => {
     const file = e.target.files?.[0];
@@ -41,8 +34,7 @@ export default function OldMachineSection({ onUseForFit }) {
     e.preventDefault();
     setSaving(true);
     try {
-      const saved = await saveOldMachine(user, form, photoFile);
-      setList((prev) => [saved, ...prev]);
+      await save(form, photoFile);
       setForm({ name: "", width_mm: "", depth_mm: "", height_mm: "", tap: "unknown" });
       clearPhoto();
     } finally {
@@ -51,8 +43,7 @@ export default function OldMachineSection({ onUseForFit }) {
   };
 
   const handleDelete = async (id) => {
-    await deleteOldMachine(user, id);
-    setList((prev) => prev.filter((m) => m.id !== id));
+    await remove(id);
   };
 
   const handleMagicLink = async (e) => {
@@ -261,6 +252,7 @@ export default function OldMachineSection({ onUseForFit }) {
                       <button
                         onClick={() =>
                           onUseForFit({
+                            name: m.name,
                             width: m.width_mm,
                             depth: m.depth_mm,
                             height: m.height_mm,
