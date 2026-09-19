@@ -71,7 +71,42 @@
       "noDryBudget": "乾燥機能なしでお手頃",
       "type": "ご希望のタイプ"
     },
+    "household": {
+      "solo": "一人暮らしの方",
+      "couple": "二人暮らしのご家庭",
+      "family": "3人以上のご家族"
+    },
+    "explain": {
+      "fitGood": "入力された設置スペースに余裕をもって置けます。",
+      "fitTight": "置くことはできますが、かなりギリギリです。購入前に実際の寸法を再確認してください。",
+      "capacityMatch": "{{kg}}kgの洗濯容量は、{{household}}にちょうど良いサイズです。",
+      "dryHeatPump": "ヒートポンプ乾燥を搭載しているので、干す手間なくしっかり乾かせます。",
+      "drySimple": "簡易乾燥機能つきなので、雨の日や部屋干しできない日にも便利です。",
+      "noDryBudget": "乾燥機能を省いている分、価格が抑えられています（乾燥は不要とのご希望に合わせました）。",
+      "typeMatchVertical": "ご希望どおり縦型タイプです。",
+      "typeMatchDrum": "ご希望どおりドラム式タイプです。",
+      "quiet": "脱水時の運転音は{{db}}dBと、この中では静かな部類に入ります。壁が薄いお部屋や夜の洗濯にも安心です。",
+      "valuePick": "{{price}}と、条件に合う機種の中では最もお手頃な価格です。",
+      "premiumPick": "条件に合う機種の中でも、機能が最も充実した上位モデルです。"
+    },
+    "showMore": "候補の全{{n}}台を表示",
+    "showLess": "表示を減らす",
     "viewAll": "全機種の比較表を見る ↓"
+  },
+  "specs": {
+    "noiseWash": "運転音（洗濯時）",
+    "noiseSpin": "運転音（脱水時）",
+    "power": "消費電力量（洗濯）",
+    "powerDry": "消費電力量（乾燥）",
+    "water": "使用水量（洗濯）",
+    "time": "洗濯時間",
+    "timeDry": "乾燥時間",
+    "weight": "質量",
+    "dbValue": "{{db}}dB",
+    "whValue": "{{wh}}Wh",
+    "lValue": "{{l}}L",
+    "minValue": "{{min}}分",
+    "kgValue": "{{kg}}kg"
   },
   "compare": {
     "heading": "③ 全機種でくらべる",

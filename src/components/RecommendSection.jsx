@@ -1,8 +1,9 @@
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { recommend, DEFAULT_PREFS } from "../lib/recommend";
+import { recommend, DEFAULT_PREFS, TOP_SHOWN } from "../lib/recommend";
 import { yen } from "../lib/format";
 import FitBadge from "./FitBadge.jsx";
+import SpecChip from "./SpecChip.jsx";
 
 function ChipGroup({ options, value, onChange }) {
   return (
@@ -36,16 +37,58 @@ const RANK_STYLES = [
   "bg-cream-200 text-ink-700",
   "bg-cream-200 text-ink-700",
   "bg-cream-200 text-ink-700",
+  "bg-cream-100 text-ink-500",
+  "bg-cream-100 text-ink-500",
+  "bg-cream-100 text-ink-500",
+  "bg-cream-100 text-ink-500",
+  "bg-cream-100 text-ink-500",
 ];
+
+function explainSentence(t, e) {
+  switch (e.type) {
+    case "fitGood":
+      return t("recommend.explain.fitGood");
+    case "fitTight":
+      return t("recommend.explain.fitTight");
+    case "capacityMatch":
+      return t("recommend.explain.capacityMatch", {
+        kg: e.params.kg,
+        household: t(`recommend.household.${e.params.household}`),
+      });
+    case "dryHeatPump":
+      return t("recommend.explain.dryHeatPump");
+    case "drySimple":
+      return t("recommend.explain.drySimple");
+    case "noDryBudget":
+      return t("recommend.explain.noDryBudget");
+    case "typeMatch":
+      return t(
+        e.params.type === "vertical"
+          ? "recommend.explain.typeMatchVertical"
+          : "recommend.explain.typeMatchDrum",
+      );
+    case "quiet":
+      return t("recommend.explain.quiet", { db: e.params.db });
+    case "valuePick":
+      return t("recommend.explain.valuePick", { price: yen(e.params.price) });
+    case "premiumPick":
+      return t("recommend.explain.premiumPick");
+    default:
+      return null;
+  }
+}
 
 export default function RecommendSection({ space }) {
   const { t, i18n } = useTranslation();
   const isJa = i18n.language?.startsWith("ja");
   const [prefs, setPrefs] = useState(DEFAULT_PREFS);
+  const [showAll, setShowAll] = useState(false);
 
   const setPref = (key) => (val) => setPrefs((p) => ({ ...p, [key]: val }));
 
   const { results } = useMemo(() => recommend(space, prefs), [space, prefs]);
+  const shown = showAll ? results : results.slice(0, TOP_SHOWN);
+  const hasMore = results.length > TOP_SHOWN;
 
   const capacityOptions = [
     { val: "solo", label: t("recommend.capacitySolo") },
@@ -99,67 +142,93 @@ export default function RecommendSection({ space }) {
           </p>
         ) : (
           <ol className="mt-6 flex flex-col gap-3">
-            {results.map((m, i) => (
+            {shown.map((m, i) => (
               <li
                 key={m.id}
-                className={`flex flex-col gap-3 rounded-card border bg-white p-4 shadow-sm sm:flex-row sm:items-center sm:p-5 ${
+                className={`flex flex-col gap-3 rounded-card border bg-white p-4 shadow-sm sm:p-5 ${
                   i === 0 ? "border-sakura-300 ring-2 ring-sakura-100" : "border-sakura-100"
                 }`}
               >
-                <span
-                  className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-bold ${RANK_STYLES[i]}`}
-                >
-                  {i + 1}
-                </span>
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                  <span
+                    className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-bold ${RANK_STYLES[i]}`}
+                  >
+                    {i + 1}
+                  </span>
 
-                <div className="min-w-0 flex-1">
-                  <div className="flex flex-wrap items-baseline gap-x-2">
-                    <p className="font-semibold text-ink-800">
-                      {isJa ? m.brand_ja : m.brand_en} {m.model}
+                  <div className="min-w-0 flex-1">
+                    <div className="flex flex-wrap items-baseline gap-x-2">
+                      <p className="font-semibold text-ink-800">
+                        {isJa ? m.brand_ja : m.brand_en} {m.model}
+                      </p>
+                      <FitBadge status={m.fit} />
+                    </div>
+                    <p className="mt-0.5 text-xs text-ink-400">
+                      {t(m.type === "vertical" ? "compare.typeVertical" : "compare.typeDrum")} ·{" "}
+                      {m.wash_kg}kg{m.dry_kg ? ` / ${m.dry_kg}kg` : ""} · {m.width_mm}×{m.depth_mm}×
+                      {m.height_mm}mm
                     </p>
-                    <FitBadge status={m.fit} />
+                    <div className="mt-2 flex flex-wrap gap-1.5">
+                      {m.reasons.map((r) => (
+                        <span
+                          key={r}
+                          className="rounded-full bg-sage-100 px-2.5 py-1 text-xs font-medium text-sage-600"
+                        >
+                          {t(`recommend.reasons.${r}`)}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                  <p className="mt-0.5 text-xs text-ink-400">
-                    {t(m.type === "vertical" ? "compare.typeVertical" : "compare.typeDrum")} ·{" "}
-                    {m.wash_kg}kg{m.dry_kg ? ` / ${m.dry_kg}kg` : ""} · {m.width_mm}×{m.depth_mm}×
-                    {m.height_mm}mm
-                  </p>
-                  <div className="mt-2 flex flex-wrap gap-1.5">
-                    {m.reasons.map((r) => (
-                      <span
-                        key={r}
-                        className="rounded-full bg-sage-100 px-2.5 py-1 text-xs font-medium text-sage-600"
+
+                  <div className="flex shrink-0 flex-row items-center gap-2 sm:flex-col sm:items-end">
+                    <p className="text-lg font-bold text-ink-800">{yen(m.price_yen)}</p>
+                    <div className="flex gap-1.5">
+                      <a
+                        href={m.yodobashi}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="rounded-full bg-sakura-100 px-2.5 py-1 text-xs font-medium text-sakura-600 hover:bg-sakura-200"
                       >
-                        {t(`recommend.reasons.${r}`)}
-                      </span>
-                    ))}
+                        {t("compare.yodobashi")}
+                      </a>
+                      <a
+                        href={m.biccamera}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="rounded-full bg-sage-100 px-2.5 py-1 text-xs font-medium text-sage-600 hover:bg-sage-200"
+                      >
+                        {t("compare.biccamera")}
+                      </a>
+                    </div>
                   </div>
                 </div>
 
-                <div className="flex shrink-0 flex-row items-center gap-2 sm:flex-col sm:items-end">
-                  <p className="text-lg font-bold text-ink-800">{yen(m.price_yen)}</p>
-                  <div className="flex gap-1.5">
-                    <a
-                      href={m.yodobashi}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="rounded-full bg-sakura-100 px-2.5 py-1 text-xs font-medium text-sakura-600 hover:bg-sakura-200"
-                    >
-                      {t("compare.yodobashi")}
-                    </a>
-                    <a
-                      href={m.biccamera}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="rounded-full bg-sage-100 px-2.5 py-1 text-xs font-medium text-sage-600 hover:bg-sage-200"
-                    >
-                      {t("compare.biccamera")}
-                    </a>
-                  </div>
+                {m.explain.length > 0 && (
+                  <p className="rounded-2xl bg-cream-50 px-3.5 py-2.5 text-sm leading-relaxed text-ink-600">
+                    {m.explain.map((e) => explainSentence(t, e)).filter(Boolean).join(" ")}
+                  </p>
+                )}
+
+                <div className="flex flex-wrap gap-1.5">
+                  <SpecChip label={t("specs.noiseSpin")} value={t("specs.dbValue", { db: m.noise_spin_db })} />
+                  <SpecChip label={t("specs.power")} value={t("specs.whValue", { wh: m.power_wash_wh })} />
+                  <SpecChip label={t("specs.water")} value={t("specs.lValue", { l: m.water_l })} />
+                  <SpecChip label={t("specs.time")} value={t("specs.minValue", { min: m.time_min })} />
+                  <SpecChip label={t("specs.weight")} value={t("specs.kgValue", { kg: m.weight_kg })} />
                 </div>
               </li>
             ))}
           </ol>
+        )}
+
+        {hasMore && (
+          <button
+            type="button"
+            onClick={() => setShowAll((s) => !s)}
+            className="mt-4 w-full rounded-full border border-sakura-200 bg-white py-2.5 text-sm font-medium text-sakura-600 shadow-sm transition hover:bg-sakura-50"
+          >
+            {showAll ? t("recommend.showLess") : t("recommend.showMore", { n: results.length })}
+          </button>
         )}
 
         <a

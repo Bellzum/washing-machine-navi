@@ -17,13 +17,16 @@ this locally, connect a free Supabase backend, and publish it for free.
 
 - **Apartment fit-check** — enter your pan size / install space and every
   machine in the table is flagged ◎ fits / △ tight / × too large.
-- **Top 5 recommendations** — pick your capacity/drying/type preferences
-  and get a ranked top 5 (anything that won't fit your space is excluded
-  outright, not just deprioritized), each with plain-language reasons —
-  for people who find a 40-row spec sheet overwhelming and don't
-  necessarily know top-load from drum yet.
-- **Comparison table** — the full price, wash/dry capacity, W×D×H, water
-  tap requirement, and features grid, filterable by type and sortable,
+- **Top 5 (or more) recommendations** — pick your capacity/drying/type
+  preferences and get a ranked shortlist (anything that won't fit your
+  space is excluded outright, not just deprioritized). Each machine comes
+  with a short plain-language write-up of *why* it was picked — not just
+  a tag — plus its noise, power/water use, wash time, and weight, and you
+  can expand the list to see every ranked candidate, not just the top 5.
+- **Comparison table** — price, wash/dry capacity, W×D×H, water tap
+  requirement, and a pamphlet-level spec breakdown (noise during wash and
+  spin, power consumption, water use, wash/dry time, weight) in an
+  expandable detail row per machine — filterable by type and sortable,
   for anyone who wants to dig in themselves.
 - **Old-machine log** — save your current machine's dimensions and a
   reference photo (e.g. of the spec label or tap area). Works fully

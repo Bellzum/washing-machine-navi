@@ -4,6 +4,7 @@ import machinesData from "../data/machines.json";
 import { computeFit, tapCompatible } from "../lib/fit";
 import { yen } from "../lib/format";
 import FitBadge from "./FitBadge.jsx";
+import SpecChip from "./SpecChip.jsx";
 
 const { machines } = machinesData;
 
@@ -161,24 +162,55 @@ export default function CompareSection({ space }) {
                     {expanded === m.id && (
                       <tr className="border-b border-cream-100 bg-cream-50/70">
                         <td colSpan={8} className="px-4 py-4">
-                          <div className="flex flex-wrap items-start gap-4">
-                            <div className="flex flex-wrap gap-1.5">
-                              {m.features.map((f) => (
-                                <span
-                                  key={f}
-                                  className="rounded-full bg-white px-2.5 py-1 text-xs font-medium text-ink-600 shadow-sm"
-                                >
-                                  {t(`features.${f}`)}
-                                </span>
-                              ))}
-                            </div>
-                            <p className="max-w-xl text-sm leading-relaxed text-ink-600">
-                              {isJa ? m.notes_ja : m.notes_en}
-                            </p>
-                            <p className="text-xs text-ink-400">
-                              {t("compare.columns.pan")}: {m.min_pan_mm}mm〜
-                            </p>
+                          <div className="flex flex-wrap gap-1.5">
+                            <SpecChip
+                              label={t("specs.noiseWash")}
+                              value={t("specs.dbValue", { db: m.noise_wash_db })}
+                            />
+                            <SpecChip
+                              label={t("specs.noiseSpin")}
+                              value={t("specs.dbValue", { db: m.noise_spin_db })}
+                            />
+                            <SpecChip
+                              label={t("specs.power")}
+                              value={t("specs.whValue", { wh: m.power_wash_wh })}
+                            />
+                            {m.power_dry_wh && (
+                              <SpecChip
+                                label={t("specs.powerDry")}
+                                value={t("specs.whValue", { wh: m.power_dry_wh })}
+                              />
+                            )}
+                            <SpecChip label={t("specs.water")} value={t("specs.lValue", { l: m.water_l })} />
+                            <SpecChip
+                              label={t("specs.time")}
+                              value={t("specs.minValue", { min: m.time_min })}
+                            />
+                            {m.dry_time_min && (
+                              <SpecChip
+                                label={t("specs.timeDry")}
+                                value={t("specs.minValue", { min: m.dry_time_min })}
+                              />
+                            )}
+                            <SpecChip label={t("specs.weight")} value={t("specs.kgValue", { kg: m.weight_kg })} />
+                            <SpecChip
+                              label={t("compare.columns.pan")}
+                              value={`${m.min_pan_mm}mm〜`}
+                            />
                           </div>
+                          <div className="mt-3 flex flex-wrap gap-1.5">
+                            {m.features.map((f) => (
+                              <span
+                                key={f}
+                                className="rounded-full bg-sage-50 px-2.5 py-1 text-xs font-medium text-sage-600"
+                              >
+                                {t(`features.${f}`)}
+                              </span>
+                            ))}
+                          </div>
+                          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-ink-600">
+                            {isJa ? m.notes_ja : m.notes_en}
+                          </p>
                         </td>
                       </tr>
                     )}

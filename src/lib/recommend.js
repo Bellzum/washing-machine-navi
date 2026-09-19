@@ -12,10 +12,18 @@ export const CAPACITY_BANDS = {
 
 export const DEFAULT_PREFS = { capacity: "any", dry: "any", type: "any" };
 
+// How many ranked results the caller can ask for. The UI shows TOP_SHOWN by
+// default with a "show more" toggle that reveals up to TOP_MAX.
+export const TOP_SHOWN = 5;
+export const TOP_MAX = 10;
+
 // Scores every machine against the user's stated space + preferences, hard
 // -excludes anything that plainly won't fit once a space has been entered
 // (that's the whole point — "reliable comparison" instead of a wall of
-// specs), and returns the top 5 with short reason tags to show our work.
+// specs), and returns up to TOP_MAX ranked machines. Each result also gets
+// a short list of "explain" entries — structured {type, params} objects the
+// UI turns into a couple of plain-language sentences on why it was picked,
+// built from real spec numbers (not just a fit/capacity/type tag).
 export function recommend(space, prefs) {
   const spaceKnown = computeFit(machines[0], space) !== "unknown";
 
@@ -90,5 +98,55 @@ export function recommend(space, prefs) {
 
   scored.sort((a, b) => b.score - a.score);
 
-  return { results: scored.slice(0, 5), spaceKnown, totalCandidates: candidates.length };
+  const top = scored.slice(0, TOP_MAX);
+
+  // Relative standouts (quietest / cheapest) are judged against this
+  // shortlist, not the whole 14-model catalog, so the claim stays honest
+  // even when the space/preferences have already ruled a lot of it out.
+  const spinValues = top.map((m) => m.noise_spin_db).filter((v) => typeof v === "number");
+  const quietThreshold = spinValues.length
+    ? spinValues.reduce((a, b) => a + b, 0) / spinValues.length - 2
+    : null;
+  const cheapest = top.reduce(
+    (min, m) => (min === null || m.price_yen < min ? m.price_yen : min),
+    null,
+  );
+
+  const results = top.map((m) => {
+    const explain = [];
+
+    if (m.fit === "fits") explain.push({ type: "fitGood" });
+    else if (m.fit === "tight") explain.push({ type: "fitTight" });
+
+    const band = CAPACITY_BANDS[prefs.capacity];
+    if (band && m.wash_kg >= band.min && m.wash_kg <= band.max) {
+      explain.push({ type: "capacityMatch", params: { kg: m.wash_kg, household: prefs.capacity } });
+    }
+
+    if (prefs.dry === "heat_pump" && m.features.includes("heat_pump_dry")) {
+      explain.push({ type: "dryHeatPump" });
+    } else if (prefs.dry === "simple" && m.dry_kg) {
+      explain.push({ type: "drySimple" });
+    } else if (prefs.dry === "none" && !m.dry_kg) {
+      explain.push({ type: "noDryBudget" });
+    }
+
+    if (prefs.type !== "any" && m.type === prefs.type) {
+      explain.push({ type: "typeMatch", params: { type: m.type } });
+    }
+
+    if (typeof m.noise_spin_db === "number" && quietThreshold !== null && m.noise_spin_db <= quietThreshold) {
+      explain.push({ type: "quiet", params: { db: m.noise_spin_db } });
+    }
+
+    if (m.price_yen === cheapest) {
+      explain.push({ type: "valuePick", params: { price: m.price_yen } });
+    } else if (m.features.includes("premium")) {
+      explain.push({ type: "premiumPick" });
+    }
+
+    return { ...m, explain };
+  });
+
+  return { results, spaceKnown, totalCandidates: candidates.length };
 }

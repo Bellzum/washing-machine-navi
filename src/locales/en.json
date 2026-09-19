@@ -71,7 +71,42 @@
       "noDryBudget": "No drying, better value",
       "type": "Your preferred type"
     },
+    "household": {
+      "solo": "someone living alone",
+      "couple": "a couple",
+      "family": "a family of 3 or more"
+    },
+    "explain": {
+      "fitGood": "It fits your entered space with room to spare.",
+      "fitTight": "It fits, but only just — double-check your measurements before buying.",
+      "capacityMatch": "Its {{kg}}kg wash capacity is a good match for {{household}}.",
+      "dryHeatPump": "It has proper heat-pump drying, so laundry comes out fully dry without you needing to hang it.",
+      "drySimple": "It includes simple drying — handy on rainy days when you can't hang laundry outside.",
+      "noDryBudget": "It skips the drying function, which keeps the price down since you said you don't need one.",
+      "typeMatchVertical": "It's a vertical (top-load) machine, matching the type you said you'd prefer.",
+      "typeMatchDrum": "It's a drum (front-load) machine, matching the type you said you'd prefer.",
+      "quiet": "At {{db}}dB during spin, it's one of the quieter picks here — good if your walls are thin or you tend to do laundry at night.",
+      "valuePick": "At {{price}}, it's the most affordable machine that still meets your conditions.",
+      "premiumPick": "It's a higher-end pick with the most complete feature set among your matches."
+    },
+    "showMore": "Show all {{n}} ranked matches",
+    "showLess": "Show fewer",
     "viewAll": "See the full comparison table ↓"
+  },
+  "specs": {
+    "noiseWash": "Noise (wash)",
+    "noiseSpin": "Noise (spin)",
+    "power": "Power use (wash)",
+    "powerDry": "Power use (dry)",
+    "water": "Water use (wash)",
+    "time": "Wash time",
+    "timeDry": "Dry time",
+    "weight": "Weight",
+    "dbValue": "{{db}} dB",
+    "whValue": "{{wh}} Wh",
+    "lValue": "{{l}} L",
+    "minValue": "{{min}} min",
+    "kgValue": "{{kg}} kg"
   },
   "compare": {
     "heading": "③ Compare all machines",
