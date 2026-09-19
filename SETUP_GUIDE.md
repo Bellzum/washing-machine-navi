@@ -38,21 +38,21 @@ log (saved to your browser only, for now). Nothing else needed yet.
 1. Go to [github.com/new](https://github.com/new) and create a new
    repository. Suggested name: `washing-machine-navi`. Leave it
    **public** (so anyone can see and use it), and don't initialize it
-   with a README (you already have one).
+   with a README (you already have one — this project folder already
+   has its own git history with an initial commit).
 2. On your computer, inside the `washing-machine-navi` folder, run:
 
    ```bash
-   git init
-   git add .
-   git commit -m "Initial commit"
-   git branch -M main
    git remote add origin https://github.com/<your-username>/washing-machine-navi.git
    git push -u origin main
    ```
 
    Replace `<your-username>` with your GitHub username. If this is the
    first time pushing from this computer, GitHub will prompt you to sign
-   in (a browser window usually opens automatically).
+   in (a browser window usually opens automatically). If you unzipped
+   this project instead of getting it as a live folder, and it doesn't
+   have a `.git` folder for some reason, run `git init && git add . &&
+   git commit -m "Initial commit" && git branch -M main` first.
 
 Your code is now on GitHub. 🎉 You can view it at
 `https://github.com/<your-username>/washing-machine-navi`.
