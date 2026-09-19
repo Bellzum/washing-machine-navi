@@ -2,29 +2,10 @@ import { Fragment, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import machinesData from "../data/machines.json";
 import { computeFit, tapCompatible } from "../lib/fit";
+import { yen } from "../lib/format";
+import FitBadge from "./FitBadge.jsx";
 
 const { machines } = machinesData;
-
-const FIT_STYLES = {
-  fits: "bg-sage-100 text-sage-600",
-  tight: "bg-amber-100 text-amber-700",
-  no: "bg-rose-100 text-rose-600",
-  unknown: "bg-cream-200 text-ink-400",
-};
-
-function FitBadge({ status, t }) {
-  return (
-    <span
-      className={`inline-block whitespace-nowrap rounded-full px-2.5 py-1 text-xs font-semibold ${FIT_STYLES[status]}`}
-    >
-      {t(`compare.fitStatus.${status}`)}
-    </span>
-  );
-}
-
-function yen(n) {
-  return `¥${n.toLocaleString("ja-JP")}`;
-}
 
 export default function CompareSection({ space }) {
   const { t, i18n } = useTranslation();
@@ -152,7 +133,7 @@ export default function CompareSection({ space }) {
                         {yen(m.price_yen)}
                       </td>
                       <td className="px-4 py-3.5">
-                        <FitBadge status={m.fit} t={t} />
+                        <FitBadge status={m.fit} />
                       </td>
                       <td className="px-4 py-3.5">
                         <div className="flex flex-col gap-1.5">

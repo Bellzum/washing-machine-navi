@@ -7,6 +7,7 @@
   },
   "nav": {
     "fitCheck": "Check your space",
+    "recommend": "Top 5 for you",
     "compare": "Compare machines",
     "oldMachine": "Log your old machine",
     "guide": "Buying guide"
@@ -38,8 +39,42 @@
     "useOldFallbackName": "your old machine",
     "usingOldMachineNote": "Using {{name}}'s size as a reference — your actual space may be a little larger, so treat these results as approximate."
   },
+  "recommend": {
+    "heading": "② Top 5 recommended for you",
+    "description": "Pick your conditions and we'll recommend 5 machines that fit your space from ① and match what you're looking for.",
+    "capacityLabel": "Preferred wash capacity",
+    "capacitySolo": "~7kg (living alone)",
+    "capacityCouple": "7–8kg (couple)",
+    "capacityFamily": "9kg+ (family of 3+)",
+    "capacityAny": "No preference",
+    "dryLabel": "Drying function",
+    "dryNone": "Don't need drying",
+    "drySimple": "Simple drying is fine",
+    "dryHeatPump": "Want proper heat-pump drying",
+    "dryAny": "No preference",
+    "typeLabel": "Preferred type",
+    "typeVertical": "Vertical (top-load)",
+    "typeVerticalHint": "Washes powerfully, stays compact, costs less",
+    "typeDrum": "Drum (front-load)",
+    "typeDrumHint": "Saves water, dries well, usually deeper",
+    "typeAny": "No preference",
+    "typeHelp": "Not sure which is which? Check the \"Quick buying guide\" below.",
+    "spaceHint": "* Fill in ① first and anything that won't fit is automatically excluded. Without it, every machine is a candidate.",
+    "rank": "#{{rank}}",
+    "noResults": "No machines match these conditions — try loosening them a bit.",
+    "reasons": {
+      "fits": "Fits your space",
+      "tight": "Fits, but tight — double-check",
+      "capacity": "Close to your preferred capacity",
+      "dryHeatPump": "Has heat-pump drying",
+      "dry": "Has drying",
+      "noDryBudget": "No drying, better value",
+      "type": "Your preferred type"
+    },
+    "viewAll": "See the full comparison table ↓"
+  },
   "compare": {
-    "heading": "② Compare washing machines",
+    "heading": "③ Compare all machines",
     "description": "Price, size and features in one table. Tap a column header to sort.",
     "filterType": "Type",
     "typeAll": "All",
@@ -95,7 +130,7 @@
     "single_or_mixer": "Works with a single tap (mixer tap needed to use the warm-wash feature)"
   },
   "old": {
-    "heading": "③ Log your current washing machine",
+    "heading": "④ Log your current washing machine",
     "description": "Before you buy, record your current machine's size and tap type. Upload a photo as your own reference (e.g. the spec label on the back, or the tap area).",
     "photoLabel": "Upload a photo (spec label, tap area, etc.)",
     "photoHelp": "This photo is not auto-analyzed — it's saved purely as your own reference.",

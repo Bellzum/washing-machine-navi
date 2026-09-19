@@ -5,6 +5,7 @@ export default function Hero() {
 
   const links = [
     { href: "#fit-check", key: "nav.fitCheck", icon: "📏" },
+    { href: "#recommend", key: "nav.recommend", icon: "🏆" },
     { href: "#compare", key: "nav.compare", icon: "🧺" },
     { href: "#old-machine", key: "nav.oldMachine", icon: "📷" },
     { href: "#guide", key: "nav.guide", icon: "💡" },

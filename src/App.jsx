@@ -1,6 +1,7 @@
 import Header from "./components/Header.jsx";
 import Hero from "./components/Hero.jsx";
 import FitCheckForm from "./components/FitCheckForm.jsx";
+import RecommendSection from "./components/RecommendSection.jsx";
 import CompareSection from "./components/CompareSection.jsx";
 import OldMachineSection from "./components/OldMachineSection.jsx";
 import GuideSection from "./components/GuideSection.jsx";
@@ -58,6 +59,7 @@ export default function App() {
       <main>
         <Hero />
         <FitCheckForm space={space} setSpace={setSpace} oldMachines={oldMachines.list} onUseOldMachine={applyOldMachineToFit} />
+        <RecommendSection space={space} />
         <CompareSection space={space} />
         <OldMachineSection
           user={user}
