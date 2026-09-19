@@ -112,27 +112,44 @@ export function recommend(space, prefs) {
     null,
   );
 
+  const band = CAPACITY_BANDS[prefs.capacity];
+
   const results = top.map((m) => {
     const explain = [];
 
     if (m.fit === "fits") explain.push({ type: "fitGood" });
     else if (m.fit === "tight") explain.push({ type: "fitTight" });
 
-    const band = CAPACITY_BANDS[prefs.capacity];
-    if (band && m.wash_kg >= band.min && m.wash_kg <= band.max) {
-      explain.push({ type: "capacityMatch", params: { kg: m.wash_kg, household: prefs.capacity } });
+    // Capacity: say so either way. Staying silent when a machine falls
+    // short of what was asked for is exactly what reads as "not listening
+    // to my preference" — so a mismatch gets its own sentence too, not
+    // just a missing tag.
+    if (band) {
+      if (m.wash_kg >= band.min && m.wash_kg <= band.max) {
+        explain.push({ type: "capacityMatch", params: { kg: m.wash_kg, household: prefs.capacity } });
+      } else if (m.wash_kg < band.min) {
+        explain.push({ type: "capacityBelow", params: { kg: m.wash_kg, capacity: prefs.capacity } });
+      } else {
+        explain.push({ type: "capacityAbove", params: { kg: m.wash_kg, capacity: prefs.capacity } });
+      }
     }
 
-    if (prefs.dry === "heat_pump" && m.features.includes("heat_pump_dry")) {
-      explain.push({ type: "dryHeatPump" });
-    } else if (prefs.dry === "simple" && m.dry_kg) {
-      explain.push({ type: "drySimple" });
+    if (prefs.dry === "heat_pump") {
+      if (m.features.includes("heat_pump_dry")) explain.push({ type: "dryHeatPump" });
+      else explain.push({ type: "dryMismatchHeatPump" });
+    } else if (prefs.dry === "simple") {
+      if (m.dry_kg) explain.push({ type: "drySimple" });
+      else explain.push({ type: "dryMismatchSimple" });
     } else if (prefs.dry === "none" && !m.dry_kg) {
       explain.push({ type: "noDryBudget" });
     }
 
-    if (prefs.type !== "any" && m.type === prefs.type) {
-      explain.push({ type: "typeMatch", params: { type: m.type } });
+    if (prefs.type !== "any") {
+      if (m.type === prefs.type) {
+        explain.push({ type: "typeMatch", params: { type: m.type } });
+      } else {
+        explain.push({ type: "typeMismatch", params: { type: m.type } });
+      }
     }
 
     if (typeof m.noise_spin_db === "number" && quietThreshold !== null && m.noise_spin_db <= quietThreshold) {
@@ -148,5 +165,21 @@ export function recommend(space, prefs) {
     return { ...m, explain };
   });
 
-  return { results, spaceKnown, totalCandidates: candidates.length };
+  // If NONE of the shown results actually satisfy a stated preference, the
+  // list is silently falling back to "closest available" rather than truly
+  // matching what was asked for — that's the exact situation that reads as
+  // broken/out-of-sync, so the UI surfaces it as an explicit heads-up
+  // instead of pretending everything lines up.
+  const unmet = {
+    capacity: band ? !results.some((m) => m.wash_kg >= band.min && m.wash_kg <= band.max) : false,
+    type: prefs.type !== "any" ? !results.some((m) => m.type === prefs.type) : false,
+    dry:
+      prefs.dry === "heat_pump"
+        ? !results.some((m) => m.features.includes("heat_pump_dry"))
+        : prefs.dry === "simple"
+          ? !results.some((m) => m.dry_kg)
+          : false,
+  };
+
+  return { results, spaceKnown, totalCandidates: candidates.length, unmet };
 }

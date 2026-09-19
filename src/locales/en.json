@@ -58,6 +58,8 @@
     "typeDrum": "Drum (front-load)",
     "typeDrumHint": "Saves water, dries well, usually deeper",
     "typeAny": "No preference",
+    "typeShortVertical": "vertical (top-load)",
+    "typeShortDrum": "drum (front-load)",
     "typeHelp": "Not sure which is which? Check the \"Quick buying guide\" below.",
     "spaceHint": "* Fill in ① first and anything that won't fit is automatically excluded. Without it, every machine is a candidate.",
     "rank": "#{{rank}}",
@@ -87,7 +89,18 @@
       "typeMatchDrum": "It's a drum (front-load) machine, matching the type you said you'd prefer.",
       "quiet": "At {{db}}dB during spin, it's one of the quieter picks here — good if your walls are thin or you tend to do laundry at night.",
       "valuePick": "At {{price}}, it's the most affordable machine that still meets your conditions.",
-      "premiumPick": "It's a higher-end pick with the most complete feature set among your matches."
+      "premiumPick": "It's a higher-end pick with the most complete feature set among your matches.",
+      "capacityBelow": "At {{kg}}kg, this is smaller than what's usually recommended for {{household}} — worth checking it covers your typical laundry load before choosing it over a larger model.",
+      "capacityAbove": "At {{kg}}kg, this is larger than what you were looking for, but smaller options didn't rank as well once your other conditions were factored in.",
+      "dryMismatchHeatPump": "This model doesn't have heat-pump drying — none of the machines that fit your entered space do, so this is the closest match on everything else.",
+      "dryMismatchSimple": "This model has no drying function at all — none of the machines that fit your entered space include one.",
+      "typeMismatchVertical": "This is a vertical (top-load) machine rather than the drum type you selected, but it's among the few options that fit your entered space.",
+      "typeMismatchDrum": "This is a drum (front-load) machine rather than the vertical type you selected, but it's among the few options that fit your entered space."
+    },
+    "unmet": {
+      "capacity": "Heads up: none of the machines that fit your entered space reach the capacity you asked for ({{label}}). These are the largest ones that do fit — you may need a deeper or wider install space to go bigger.",
+      "type": "Heads up: none of the machines that fit your entered space are {{label}} — showing the closest alternatives instead.",
+      "dry": "Heads up: none of the machines that fit your entered space match your drying preference — showing the closest alternatives instead."
     },
     "showMore": "Show all {{n}} ranked matches",
     "showLess": "Show fewer",
