@@ -107,6 +107,8 @@
     "depthLabel": "Depth (mm)",
     "heightLabel": "Height (mm)",
     "tapLabel": "Tap type",
+    "tapHelperTitle": "Not sure if it's single or mixer?",
+    "tapHelperBody": "Check for a small model code printed or embossed right on the tap body, then search \"<code> 水栓\" (or \"<code> faucet\") online — it'll usually say which type it is. Example: TOTO's TW11R / TW11GR (the common \"Pitatto-kun\" one-touch tap) is a single, cold-water-only tap with a one-touch hose connector and an emergency shut-off valve — by far the most common type in Japanese rentals.",
     "saveButton": "Save",
     "savedList": "Saved machines",
     "empty": "Nothing saved yet.",

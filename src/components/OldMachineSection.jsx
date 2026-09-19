@@ -209,6 +209,13 @@ export default function OldMachineSection({ user, signInWithEmail, signOut, mach
             </label>
           </div>
 
+          <details className="mt-3 text-sm text-ink-600">
+            <summary className="cursor-pointer font-medium text-sakura-600">
+              {t("old.tapHelperTitle")}
+            </summary>
+            <p className="mt-2 max-w-lg leading-relaxed">{t("old.tapHelperBody")}</p>
+          </details>
+
           <button
             type="submit"
             disabled={saving}
