@@ -1,0 +1,133 @@
+{
+  "app": {
+    "title": "Washing Machine Navi",
+    "titleEn": "洗濯機えらびナビ",
+    "tagline": "Find the right washing machine for your apartment, side by side.",
+    "subtagline": "Built for Japanese rentals and apartments. Enter your waterproof pan size and tap type to instantly see which machines actually fit."
+  },
+  "nav": {
+    "fitCheck": "Check your space",
+    "compare": "Compare machines",
+    "oldMachine": "Log your old machine",
+    "guide": "Buying guide"
+  },
+  "lang": {
+    "switchTo": "日本語"
+  },
+  "fit": {
+    "heading": "① Enter your install space",
+    "description": "Enter your waterproof pan size and space dimensions, and the comparison table below will show which machines fit.",
+    "panPreset": "Waterproof pan (防水パン) size",
+    "panCustom": "Enter custom size",
+    "widthLabel": "Install space width (mm)",
+    "depthLabel": "Install space depth (mm)",
+    "heightLabel": "Install space height (mm, optional)",
+    "heightHelp": "Only needed if there's a shelf or vent fan above limiting height. Leave blank if unsure.",
+    "tapLabel": "Your water tap type",
+    "tapSingle": "Single tap (cold water only — most common in rentals)",
+    "tapMixer": "Mixer tap (hot + cold water)",
+    "tapUnknown": "Not sure",
+    "resetButton": "Reset",
+    "helperTitle": "What's a 防水パン (waterproof pan)?",
+    "helperBody": "A shallow tray installed under the washing machine to catch leaks. Always compare using its inner (usable) dimensions, not the outer size. Most rentals already have one installed, and 640×640mm is the most common size."
+  },
+  "compare": {
+    "heading": "② Compare washing machines",
+    "description": "Price, size and features in one table. Tap a column header to sort.",
+    "filterType": "Type",
+    "typeAll": "All",
+    "typeVertical": "Vertical (top-load)",
+    "typeDrum": "Drum (front-load)",
+    "filterFit": "Fit",
+    "fitOnlyFit": "Only show machines that fit",
+    "sortPrice": "Lowest price first",
+    "sortCapacity": "Largest capacity first",
+    "sortWidth": "Narrowest width first",
+    "columns": {
+      "brand": "Brand / model",
+      "type": "Type",
+      "capacity": "Wash capacity",
+      "size": "Size (W × D × H)",
+      "pan": "Recommended pan size",
+      "tap": "Water tap",
+      "price": "Reference price",
+      "features": "Highlights",
+      "fit": "Fit check",
+      "links": "Where to buy"
+    },
+    "fitStatus": {
+      "fits": "Fits ◎",
+      "tight": "Tight — double-check △",
+      "no": "Too large ×",
+      "unknown": "Fill in ① to check"
+    },
+    "noResults": "No machines match these filters — try loosening your space settings.",
+    "expand": "Details",
+    "collapse": "Close",
+    "checkStore": "Check current price",
+    "yodobashi": "Search on Yodobashi.com",
+    "biccamera": "View on BicCamera.com",
+    "updatedNote": "* Prices and specs are reference information as of {{date}}. Please confirm the latest details on the store page before buying."
+  },
+  "features": {
+    "compact": "Compact design",
+    "budget": "Budget-friendly",
+    "inverter": "Inverter motor",
+    "auto_tub_clean": "Auto tub cleaning",
+    "simple_dry": "Simple drying",
+    "heat_pump_dry": "Heat-pump drying",
+    "auto_detergent": "Auto detergent dosing",
+    "quick_wash": "Quick-wash course",
+    "warm_wash": "Warm-water wash",
+    "ultrafine_bubble": "Ultra-fine bubble wash",
+    "family_size": "Family-size capacity",
+    "premium": "Premium / flagship model"
+  },
+  "tapType": {
+    "single": "Works with a single (cold) tap",
+    "single_or_mixer": "Works with a single tap (mixer tap needed to use the warm-wash feature)"
+  },
+  "old": {
+    "heading": "③ Log your current washing machine",
+    "description": "Before you buy, record your current machine's size and tap type. Upload a photo as your own reference (e.g. the spec label on the back, or the tap area).",
+    "photoLabel": "Upload a photo (spec label, tap area, etc.)",
+    "photoHelp": "This photo is not auto-analyzed — it's saved purely as your own reference.",
+    "photoChange": "Change photo",
+    "photoRemove": "Remove photo",
+    "nameLabel": "Name (optional)",
+    "namePlaceholder": "e.g. My parents' machine, Current apartment machine",
+    "widthLabel": "Width (mm)",
+    "depthLabel": "Depth (mm)",
+    "heightLabel": "Height (mm)",
+    "tapLabel": "Tap type",
+    "saveButton": "Save",
+    "savedList": "Saved machines",
+    "empty": "Nothing saved yet.",
+    "delete": "Delete",
+    "useForFit": "Copy into ① fit-check",
+    "signInPrompt": "Sign in to save to the cloud (without an account, this is saved only on this device).",
+    "localOnlyNote": "* Supabase isn't configured yet, so this is currently saved only in this browser.",
+    "saved": "Saved",
+    "loginEmail": "Email address",
+    "sendMagicLink": "Send sign-in link",
+    "checkInbox": "Check your inbox and click the link to sign in.",
+    "signOut": "Sign out",
+    "signedInAs": "Signed in as:"
+  },
+  "guide": {
+    "heading": "Quick buying guide",
+    "panTitle": "Measure your pan's inner size",
+    "panBody": "Compare using the pan's inner (usable) dimensions, not the machine's outer size. 640×640mm is by far the most common.",
+    "typeTitle": "Vertical vs. drum type",
+    "typeBody": "Vertical (top-load) machines wash powerfully, stay compact, and cost less. Drum (front-load) machines use less water and dry better, but are usually deeper.",
+    "tapTitle": "Check your tap type",
+    "tapBody": "Most rentals only have a cold-water single tap. Even machines with a warm-wash feature usually run fine in normal mode on a single tap — the warm feature just won't be available.",
+    "capacityTitle": "Capacity rule of thumb",
+    "capacityBody": "Living alone: 5–7kg. Couple: 7–8kg. Family of 3+: 9kg or more."
+  },
+  "footer": {
+    "madeWith": "Made for you — and everyone else about to choose a washing machine.",
+    "disclaimer": "This is an independent, unofficial reference tool. It is not affiliated with Bic Camera or Yodobashi Camera. Please confirm prices and stock on each store's official site.",
+    "github": "View source on GitHub"
+  }
+}

@@ -1,0 +1,133 @@
+{
+  "app": {
+    "title": "洗濯機えらびナビ",
+    "titleEn": "Washing Machine Navi",
+    "tagline": "あなたのお部屋にぴったりの一台を、かんたん比較。",
+    "subtagline": "日本の賃貸・マンション向け。防水パンのサイズと水栓タイプから、置ける洗濯機だけをすぐに見つけられます。"
+  },
+  "nav": {
+    "fitCheck": "設置スペースをチェック",
+    "compare": "洗濯機をくらべる",
+    "oldMachine": "今の洗濯機を登録",
+    "guide": "選び方ガイド"
+  },
+  "lang": {
+    "switchTo": "English"
+  },
+  "fit": {
+    "heading": "① お部屋の設置スペースを入力",
+    "description": "防水パンのサイズや置き場所の寸法を入れると、下の比較表に「置けるかどうか」が表示されます。",
+    "panPreset": "防水パンのサイズ",
+    "panCustom": "自分で入力する",
+    "widthLabel": "設置スペースの幅 (mm)",
+    "depthLabel": "設置スペースの奥行き (mm)",
+    "heightLabel": "設置スペースの高さ (mm・任意)",
+    "heightHelp": "上に棚や換気扇がある場合の高さ制限。わからなければ空欄でOK。",
+    "tapLabel": "お部屋の水栓タイプ",
+    "tapSingle": "単水栓（水のみ・賃貸で最も多い）",
+    "tapMixer": "混合水栓（お湯も出る）",
+    "tapUnknown": "わからない",
+    "resetButton": "リセット",
+    "helperTitle": "防水パンって？",
+    "helperBody": "洗濯機の下に設置する、水漏れを受け止めるための四角いトレイです。内寸（実際に使えるサイズ）で測るのがポイント。賃貸なら備え付けのことが多く、640×640mmが最も一般的です。"
+  },
+  "compare": {
+    "heading": "② 洗濯機をくらべる",
+    "description": "価格・サイズ・機能をひとつの表でチェック。列の見出しをタップすると並び替えできます。",
+    "filterType": "タイプ",
+    "typeAll": "すべて",
+    "typeVertical": "縦型",
+    "typeDrum": "ドラム式",
+    "filterFit": "設置スペースに",
+    "fitOnlyFit": "置けるものだけ表示",
+    "sortPrice": "価格が安い順",
+    "sortCapacity": "容量が大きい順",
+    "sortWidth": "幅が狭い順",
+    "columns": {
+      "brand": "メーカー・型番",
+      "type": "タイプ",
+      "capacity": "洗濯容量",
+      "size": "サイズ (幅×奥行×高さ)",
+      "pan": "必要パンサイズ目安",
+      "tap": "水栓",
+      "price": "参考価格",
+      "features": "特長",
+      "fit": "設置判定",
+      "links": "販売店"
+    },
+    "fitStatus": {
+      "fits": "置けます ◎",
+      "tight": "ギリギリ／要確認 △",
+      "no": "入りません ×",
+      "unknown": "① を入力すると表示"
+    },
+    "noResults": "条件に合う洗濯機が見つかりませんでした。設置スペースの条件を見直してみてください。",
+    "expand": "詳細を見る",
+    "collapse": "閉じる",
+    "checkStore": "最新価格を見る",
+    "yodobashi": "ヨドバシ.com で検索",
+    "biccamera": "ビックカメラ.com で見る",
+    "updatedNote": "※価格・スペックは {{date}} 時点の参考情報です。ご購入前に販売店ページで最新情報をご確認ください。"
+  },
+  "features": {
+    "compact": "コンパクト設計",
+    "budget": "お手頃価格",
+    "inverter": "インバーター搭載",
+    "auto_tub_clean": "自動槽洗浄",
+    "simple_dry": "簡易乾燥機能",
+    "heat_pump_dry": "ヒートポンプ乾燥",
+    "auto_detergent": "洗剤自動投入",
+    "quick_wash": "スピード洗いコース",
+    "warm_wash": "温水洗浄機能",
+    "ultrafine_bubble": "ウルトラファインバブル",
+    "family_size": "ファミリー向け大容量",
+    "premium": "上位・プレミアムモデル"
+  },
+  "tapType": {
+    "single": "単水栓でOK",
+    "single_or_mixer": "単水栓でも可（温水機能は混合水栓が必要）"
+  },
+  "old": {
+    "heading": "③ 今使っている洗濯機を登録する",
+    "description": "買い替え前に、今の洗濯機のサイズと水栓タイプを記録しておきましょう。写真はメモ代わりに保存できます（背面の型番シールや水栓まわりを撮ると便利）。",
+    "photoLabel": "写真をアップロード（型番シール・水栓まわりなど）",
+    "photoHelp": "この写真はサイズを自動で読み取るものではありません。あなた自身の記録用として保存されます。",
+    "photoChange": "写真を変更",
+    "photoRemove": "写真を削除",
+    "nameLabel": "呼び名（任意）",
+    "namePlaceholder": "例）実家の洗濯機、今のアパートの洗濯機",
+    "widthLabel": "幅 (mm)",
+    "depthLabel": "奥行き (mm)",
+    "heightLabel": "高さ (mm)",
+    "tapLabel": "水栓タイプ",
+    "saveButton": "保存する",
+    "savedList": "登録した洗濯機",
+    "empty": "まだ登録がありません。",
+    "delete": "削除",
+    "useForFit": "①の設置スペースにコピー",
+    "signInPrompt": "クラウドに保存するにはログインしてください（未設定の場合はこの端末にのみ保存されます）。",
+    "localOnlyNote": "※ Supabase未設定のため、現在はこの端末のブラウザ内にのみ保存されています。",
+    "saved": "保存しました",
+    "loginEmail": "メールアドレス",
+    "sendMagicLink": "ログインリンクを送る",
+    "checkInbox": "メールを確認してリンクをクリックしてください。",
+    "signOut": "ログアウト",
+    "signedInAs": "ログイン中："
+  },
+  "guide": {
+    "heading": "選び方ミニガイド",
+    "panTitle": "防水パンの内寸を測る",
+    "panBody": "洗濯機の「外寸」ではなく、防水パンの「内寸（実際に洗濯機を置けるスペース）」で比較しましょう。もっとも多いのは640×640mmです。",
+    "typeTitle": "縦型とドラム式のちがい",
+    "typeBody": "縦型は洗浄力が高くコンパクト・価格も手頃。ドラム式は節水性が高く乾燥機能が充実していますが、奥行きが大きくなりがちです。",
+    "tapTitle": "水栓タイプを確認する",
+    "tapBody": "賃貸のほとんどは水のみの「単水栓」。温水洗浄などの機能があるモデルでも、単水栓のまま通常モードで使えることがほとんどです。",
+    "capacityTitle": "容量のめやす",
+    "capacityBody": "一人暮らし：5〜7kg／二人暮らし：7〜8kg／3人家族以上：9kg以上が目安です。"
+  },
+  "footer": {
+    "madeWith": "あなたと、これから洗濯機を選ぶすべての人のために。",
+    "disclaimer": "本サイトは個人が作成した非公式の参考ツールです。ビックカメラ・ヨドバシカメラとは提携していません。価格・在庫は各店舗の公式サイトでご確認ください。",
+    "github": "GitHubでソースを見る"
+  }
+}

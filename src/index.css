@@ -1,0 +1,69 @@
+@import "tailwindcss";
+
+@theme {
+  /* Soft, warm palette — sakura pink / cream / sage green,
+     aimed at a gentle Japanese lifestyle-magazine feel */
+  --color-cream-50: #fffaf6;
+  --color-cream-100: #fdf3ea;
+  --color-cream-200: #f9e8d9;
+
+  --color-sakura-50: #fff1f4;
+  --color-sakura-100: #fde0e6;
+  --color-sakura-200: #f8c2cf;
+  --color-sakura-300: #f4a9b8;
+  --color-sakura-400: #ef8fa6;
+  --color-sakura-500: #e2708c;
+  --color-sakura-600: #c85975;
+
+  --color-sage-50: #f3f7ef;
+  --color-sage-100: #e3ecdb;
+  --color-sage-200: #c9dbb9;
+  --color-sage-300: #aec99a;
+  --color-sage-400: #9dbb9a;
+  --color-sage-500: #7fa27c;
+  --color-sage-600: #5f8360;
+
+  --color-ink-50: #faf7f5;
+  --color-ink-100: #efe6e0;
+  --color-ink-400: #8a7a70;
+  --color-ink-600: #5a4c43;
+  --color-ink-700: #453a33;
+  --color-ink-800: #332b26;
+
+  --font-display: "Zen Maru Gothic", "Noto Sans JP", ui-rounded, sans-serif;
+  --font-body: "Noto Sans JP", "Zen Maru Gothic", ui-sans-serif, system-ui, sans-serif;
+
+  --radius-card: 1.5rem;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-cream-50);
+  color: var(--color-ink-700);
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+::selection {
+  background-color: var(--color-sakura-200);
+  color: var(--color-ink-800);
+}
+
+/* gentle scrollbar for the comparison table */
+.thin-scroll::-webkit-scrollbar {
+  height: 10px;
+}
+.thin-scroll::-webkit-scrollbar-track {
+  background: var(--color-cream-100);
+  border-radius: 999px;
+}
+.thin-scroll::-webkit-scrollbar-thumb {
+  background: var(--color-sakura-200);
+  border-radius: 999px;
+}
