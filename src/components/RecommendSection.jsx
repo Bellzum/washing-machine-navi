@@ -259,12 +259,31 @@ export default function RecommendSection({ space }) {
                   </div>
                 </div>
 
-                {m.explain.length > 0 && (
-                  <p className="rounded-2xl bg-cream-50 px-3.5 py-2.5 text-sm leading-relaxed text-ink-600">
-                    {m.explain.map((e) => explainSentence(t, e)).filter(Boolean).join(" ")}
-                    {m.lidClearance === "unknown" && <span aria-hidden="true"> ⚠️</span>}
-                  </p>
-                )}
+                {m.explain.length > 0 &&
+                  (i === 0 ? (
+                    <div className="rounded-2xl bg-cream-50 px-3.5 py-2.5">
+                      <p className="text-xs font-semibold tracking-wide text-sakura-600 uppercase">
+                        {t("recommend.topPickHeading")}
+                      </p>
+                      <ul className="mt-1.5 list-disc space-y-1 pl-4 text-sm leading-relaxed text-ink-600">
+                        {m.explain.map((e, idx) => {
+                          const sentence = explainSentence(t, e);
+                          if (!sentence) return null;
+                          return (
+                            <li key={idx}>
+                              {sentence}
+                              {e.type === "lidUnknown" && <span aria-hidden="true"> ⚠️</span>}
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </div>
+                  ) : (
+                    <p className="rounded-2xl bg-cream-50 px-3.5 py-2.5 text-sm leading-relaxed text-ink-600">
+                      {m.explain.map((e) => explainSentence(t, e)).filter(Boolean).join(" ")}
+                      {m.lidClearance === "unknown" && <span aria-hidden="true"> ⚠️</span>}
+                    </p>
+                  ))}
 
                 <DeltaBadges t={t} delta={m.delta} />
 

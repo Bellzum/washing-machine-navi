@@ -115,7 +115,8 @@
     },
     "showMore": "候補の全{{n}}台を表示",
     "showLess": "表示を減らす",
-    "viewAll": "全機種の比較表を見る ↓"
+    "viewAll": "全機種の比較表を見る ↓",
+    "topPickHeading": "この機種をおすすめする理由："
   },
   "specs": {
     "noiseWash": "運転音（洗濯時）",

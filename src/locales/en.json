@@ -115,7 +115,8 @@
     },
     "showMore": "Show all {{n}} ranked matches",
     "showLess": "Show fewer",
-    "viewAll": "See the full comparison table ↓"
+    "viewAll": "See the full comparison table ↓",
+    "topPickHeading": "Why this is our top pick:"
   },
   "specs": {
     "noiseWash": "Noise (wash)",
