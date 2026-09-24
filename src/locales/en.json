@@ -98,7 +98,8 @@
       "typeMismatchVertical": "This is a vertical (top-load) machine rather than the drum type you selected, but it's among the few options that fit your entered space.",
       "typeMismatchDrum": "This is a drum (front-load) machine rather than the vertical type you selected, but it's among the few options that fit your entered space.",
       "lidFits": "Its lid-open height ({{mm}}mm) is confirmed to clear the ceiling/shelf limit you entered.",
-      "lidUnknown": "We couldn't confirm this model's lid-open height (the clearance needed above it for the lid to fully open) — check the manufacturer's installation manual before relying on it against your ceiling or shelf limit."
+      "lidUnknown": "We couldn't confirm this model's lid-open height (the clearance needed above it for the lid to fully open) — check the manufacturer's installation manual before relying on it against your ceiling or shelf limit.",
+      "heightUnverified": "At {{mm}}mm tall, it's taller than the old machine you used as your space reference — that figure is its old body height, not a measured ceiling/shelf limit, so double-check your actual clearance before buying."
     },
     "unmet": {
       "capacity": "Heads up: none of the machines that fit your entered space reach the capacity you asked for ({{label}}). These are the largest ones that do fit — you may need a deeper or wider install space to go bigger.",
@@ -106,6 +107,7 @@
       "dry": "Heads up: none of the machines that fit your entered space match your drying preference — showing the closest alternatives instead."
     },
     "lidCaution": "Note: some of these results don't have a confirmed lid-open height, so we couldn't fully check them against your ceiling/shelf limit — look for the ⚠️ note on each one and check the manufacturer's installation manual before buying.",
+    "heightCaution": "Note: some of these results are taller than the old machine you used as your space reference. We didn't rule them out for that alone — your old machine's height isn't necessarily your real ceiling/shelf limit — but do confirm your actual clearance before buying.",
     "delta": {
       "heading": "Vs. your old machine ({{name}})",
       "width": "W {{sign}}{{mm}}mm",

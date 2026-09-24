@@ -95,6 +95,8 @@ function explainSentence(t, e) {
       return t("recommend.explain.lidFits", { mm: e.params.mm });
     case "lidUnknown":
       return t("recommend.explain.lidUnknown");
+    case "heightUnverified":
+      return t("recommend.explain.heightUnverified", { mm: e.params.mm });
     default:
       return null;
   }
@@ -125,7 +127,10 @@ export default function RecommendSection({ space }) {
 
   const setPref = (key) => (val) => setPrefs((p) => ({ ...p, [key]: val }));
 
-  const { results, unmet, lidCaution } = useMemo(() => recommend(space, prefs), [space, prefs]);
+  const { results, unmet, lidCaution, heightCaution } = useMemo(
+    () => recommend(space, prefs),
+    [space, prefs],
+  );
   const shown = showAll ? results : results.slice(0, TOP_SHOWN);
   const hasMore = results.length > TOP_SHOWN;
   const unmetMessages = useMemo(() => unmetMessage(t, prefs, unmet), [t, prefs, unmet]);
@@ -189,6 +194,12 @@ export default function RecommendSection({ space }) {
         {lidCaution && (
           <p className="mt-4 rounded-2xl border border-cream-200 bg-cream-100 px-4 py-2.5 text-xs leading-relaxed text-ink-500">
             {t("recommend.lidCaution")}
+          </p>
+        )}
+
+        {heightCaution && (
+          <p className="mt-4 rounded-2xl border border-cream-200 bg-cream-100 px-4 py-2.5 text-xs leading-relaxed text-ink-500">
+            {t("recommend.heightCaution")}
           </p>
         )}
 

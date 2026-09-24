@@ -1,5 +1,5 @@
 import machinesData from "../data/machines.json";
-import { computeFit, checkLidClearance, deltaVsOldMachine } from "./fit";
+import { computeFit, checkLidClearance, deltaVsOldMachine, heightUnverifiedVsOldMachine } from "./fit";
 
 const { machines } = machinesData;
 
@@ -31,7 +31,8 @@ export function recommend(space, prefs) {
     .map((m) => {
       const fit = computeFit(m, space);
       const lidClearance = checkLidClearance(m, space);
-      return { ...m, fit, lidClearance };
+      const heightUnverified = heightUnverifiedVsOldMachine(m, space);
+      return { ...m, fit, lidClearance, heightUnverified };
     })
     // Hard-exclude anything that won't physically fit once we know the space,
     // and — separately — anything whose CONFIRMED lid-open height won't clear
@@ -172,6 +173,10 @@ export function recommend(space, prefs) {
       explain.push({ type: "lidUnknown" });
     }
 
+    if (m.heightUnverified) {
+      explain.push({ type: "heightUnverified", params: { mm: m.height_mm } });
+    }
+
     return { ...m, explain, delta: deltaVsOldMachine(m, space) };
   });
 
@@ -179,23 +184,37 @@ export function recommend(space, prefs) {
   // list is silently falling back to "closest available" rather than truly
   // matching what was asked for — that's the exact situation that reads as
   // broken/out-of-sync, so the UI surfaces it as an explicit heads-up
-  // instead of pretending everything lines up.
-  const unmet = {
-    capacity: band ? !results.some((m) => m.wash_kg >= band.min && m.wash_kg <= band.max) : false,
-    type: prefs.type !== "any" ? !results.some((m) => m.type === prefs.type) : false,
-    dry:
-      prefs.dry === "heat_pump"
-        ? !results.some((m) => m.features.includes("heat_pump_dry"))
-        : prefs.dry === "simple"
-          ? !results.some((m) => m.dry_kg)
-          : false,
+  // instead of pretending everything lines up. Each check is judged against
+  // the OTHER active preferences too, not capacity/type/dry in isolation —
+  // otherwise a machine that only matches on, say, capacity but is the
+  // wrong type can silently satisfy the "capacity" check and hide the
+  // banner, even though nothing shown actually meets what was asked for
+  // taken together.
+  const capacityOk = (m) => !band || (m.wash_kg >= band.min && m.wash_kg <= band.max);
+  const typeOk = (m) => prefs.type === "any" || m.type === prefs.type;
+  const dryOk = (m) => {
+    if (prefs.dry === "heat_pump") return m.features.includes("heat_pump_dry");
+    if (prefs.dry === "simple") return !!m.dry_kg;
+    return true;
   };
 
-  // Separate from "unmet preferences" above: this flags when we had to show
-  // at least one result whose lid-open clearance we simply don't know,
-  // rather than pretending every listed machine was checked against the
-  // ceiling/shelf limit that was entered.
-  const lidCaution = results.some((m) => m.lidClearance === "unknown");
+  const unmet = {
+    capacity: band ? !results.some((m) => capacityOk(m) && typeOk(m) && dryOk(m)) : false,
+    type: prefs.type !== "any" ? !results.some((m) => typeOk(m) && capacityOk(m) && dryOk(m)) : false,
+    dry:
+      prefs.dry === "heat_pump" || prefs.dry === "simple"
+        ? !results.some((m) => dryOk(m) && capacityOk(m) && typeOk(m))
+        : false,
+  };
 
-  return { results, spaceKnown, totalCandidates: candidates.length, unmet, lidCaution };
+  // Separate from "unmet preferences" above: these flag when we had to show
+  // at least one result we couldn't fully verify against what was entered —
+  // an unconfirmed lid-open height, or (for a candidate taller than a saved
+  // old machine used as the space reference) a body height we deliberately
+  // didn't hard-exclude on, since that figure isn't a measured clearance —
+  // rather than pretending everything shown was fully checked.
+  const lidCaution = results.some((m) => m.lidClearance === "unknown");
+  const heightCaution = results.some((m) => m.heightUnverified);
+
+  return { results, spaceKnown, totalCandidates: candidates.length, unmet, lidCaution, heightCaution };
 }

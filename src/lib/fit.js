@@ -13,10 +13,40 @@ export function computeFit(machine, space) {
   const depthDiff = d - machine.depth_mm;
 
   if (widthDiff < 0 || depthDiff < 0) return "no";
-  if (h != null && !Number.isNaN(h) && h > 0 && h < machine.height_mm) return "no";
+  // Height only hard-excludes a candidate when it's a real measured
+  // ceiling/shelf limit. When "use old machine as reference" auto-filled
+  // this field, it's that machine's own CLOSED BODY height — not something
+  // anyone measured as a clearance limit — so a taller candidate isn't
+  // rejected on this figure alone (same reasoning as checkLidClearance
+  // below; a candidate could easily fit under a real shelf/ceiling that's
+  // taller than the old unit just happened to be).
+  if (
+    space?.source !== "old_machine" &&
+    h != null &&
+    !Number.isNaN(h) &&
+    h > 0 &&
+    h < machine.height_mm
+  ) {
+    return "no";
+  }
 
   if (widthDiff < COMFORT_MARGIN_MM || depthDiff < COMFORT_MARGIN_MM) return "tight";
   return "fits";
+}
+
+// True when the entered height came from "use old machine as reference"
+// and this candidate is taller than that old machine's body — worth a
+// gentle caution note since we skipped hard-excluding on it above, but the
+// user hasn't confirmed their real ceiling/shelf clearance either.
+export function heightUnverifiedVsOldMachine(machine, space) {
+  const h = space?.height === "" || space?.height == null ? null : Number(space.height);
+  return (
+    space?.source === "old_machine" &&
+    h != null &&
+    !Number.isNaN(h) &&
+    h > 0 &&
+    machine.height_mm > h
+  );
 }
 
 // A top-load machine needs real headroom above its body height for the lid

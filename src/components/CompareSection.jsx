@@ -1,7 +1,13 @@
 import { Fragment, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import machinesData from "../data/machines.json";
-import { computeFit, tapCompatible, checkLidClearance, deltaVsOldMachine } from "../lib/fit";
+import {
+  computeFit,
+  tapCompatible,
+  checkLidClearance,
+  deltaVsOldMachine,
+  heightUnverifiedVsOldMachine,
+} from "../lib/fit";
 import { yen } from "../lib/format";
 import FitBadge from "./FitBadge.jsx";
 import SpecChip from "./SpecChip.jsx";
@@ -31,6 +37,7 @@ export default function CompareSection({ space }) {
         bodyFit,
         tapNote: tapCompatible(m, space),
         lidClearance,
+        heightUnverified: heightUnverifiedVsOldMachine(m, space),
         delta: deltaVsOldMachine(m, space),
       };
     });
@@ -234,6 +241,11 @@ export default function CompareSection({ space }) {
                           {m.lidClearance === "unknown" && (
                             <p className="mt-2 text-xs font-medium text-amber-600">
                               ⚠️ {t("recommend.explain.lidUnknown")}
+                            </p>
+                          )}
+                          {m.heightUnverified && (
+                            <p className="mt-2 text-xs font-medium text-amber-600">
+                              ⚠️ {t("recommend.explain.heightUnverified", { mm: m.height_mm })}
                             </p>
                           )}
                           <div className="mt-3">
