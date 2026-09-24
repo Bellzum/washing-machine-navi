@@ -181,7 +181,7 @@ export default function RecommendSection({ space }) {
           </p>
         </div>
 
-        {unmetMessages.length > 0 && (
+        {results.length > 0 && unmetMessages.length > 0 && (
           <div className="mt-4 flex flex-col gap-1.5 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3">
             {unmetMessages.map((msg) => (
               <p key={msg} className="text-xs leading-relaxed font-medium text-amber-700">
@@ -191,13 +191,13 @@ export default function RecommendSection({ space }) {
           </div>
         )}
 
-        {lidCaution && (
+        {results.length > 0 && lidCaution && (
           <p className="mt-4 rounded-2xl border border-cream-200 bg-cream-100 px-4 py-2.5 text-xs leading-relaxed text-ink-500">
             {t("recommend.lidCaution")}
           </p>
         )}
 
-        {heightCaution && (
+        {results.length > 0 && heightCaution && (
           <p className="mt-4 rounded-2xl border border-cream-200 bg-cream-100 px-4 py-2.5 text-xs leading-relaxed text-ink-500">
             {t("recommend.heightCaution")}
           </p>

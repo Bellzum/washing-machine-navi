@@ -26,6 +26,7 @@ export const TOP_MAX = 10;
 // built from real spec numbers (not just a fit/capacity/type tag).
 export function recommend(space, prefs) {
   const spaceKnown = computeFit(machines[0], space) !== "unknown";
+  const band = CAPACITY_BANDS[prefs.capacity];
 
   const candidates = machines
     .map((m) => {
@@ -35,10 +36,13 @@ export function recommend(space, prefs) {
       return { ...m, fit, lidClearance, heightUnverified };
     })
     // Hard-exclude anything that won't physically fit once we know the space,
-    // and — separately — anything whose CONFIRMED lid-open height won't clear
-    // an entered ceiling/shelf limit. A machine with an unconfirmed lid-open
-    // height is kept (we just don't know), never silently dropped.
-    .filter((m) => !(spaceKnown && m.fit === "no") && m.lidClearance !== "no");
+    // anything whose CONFIRMED lid-open height won't clear an entered
+    // ceiling/shelf limit, and — once a capacity preference is picked —
+    // anything outside that capacity band. Capacity is a stated requirement,
+    // not a nice-to-have: choosing "9kg+" should never surface a 7kg machine,
+    // even as a "closest available" fallback.
+    .filter((m) => !(spaceKnown && m.fit === "no") && m.lidClearance !== "no")
+    .filter((m) => !band || (m.wash_kg >= band.min && m.wash_kg <= band.max));
 
   const scored = candidates.map((m) => {
     let score = 0;
@@ -52,14 +56,11 @@ export function recommend(space, prefs) {
       reasons.push("tight");
     }
 
-    const band = CAPACITY_BANDS[prefs.capacity];
+    // Every candidate here already satisfies the capacity band (hard-filtered
+    // above), so this is just a scoring bonus + tag, never a penalty.
     if (band) {
-      if (m.wash_kg >= band.min && m.wash_kg <= band.max) {
-        score += 20;
-        reasons.push("capacity");
-      } else {
-        score -= Math.abs(m.wash_kg - band.ideal) * 3;
-      }
+      score += 20;
+      reasons.push("capacity");
     }
 
     if (prefs.dry === "heat_pump") {
@@ -117,26 +118,16 @@ export function recommend(space, prefs) {
     null,
   );
 
-  const band = CAPACITY_BANDS[prefs.capacity];
-
   const results = top.map((m) => {
     const explain = [];
 
     if (m.fit === "fits") explain.push({ type: "fitGood" });
     else if (m.fit === "tight") explain.push({ type: "fitTight" });
 
-    // Capacity: say so either way. Staying silent when a machine falls
-    // short of what was asked for is exactly what reads as "not listening
-    // to my preference" — so a mismatch gets its own sentence too, not
-    // just a missing tag.
+    // Capacity is hard-filtered above, so every result here already matches
+    // the band — just say so.
     if (band) {
-      if (m.wash_kg >= band.min && m.wash_kg <= band.max) {
-        explain.push({ type: "capacityMatch", params: { kg: m.wash_kg, household: prefs.capacity } });
-      } else if (m.wash_kg < band.min) {
-        explain.push({ type: "capacityBelow", params: { kg: m.wash_kg, capacity: prefs.capacity } });
-      } else {
-        explain.push({ type: "capacityAbove", params: { kg: m.wash_kg, capacity: prefs.capacity } });
-      }
+      explain.push({ type: "capacityMatch", params: { kg: m.wash_kg, household: prefs.capacity } });
     }
 
     if (prefs.dry === "heat_pump") {
