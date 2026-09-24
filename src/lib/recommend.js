@@ -37,12 +37,19 @@ export function recommend(space, prefs) {
     })
     // Hard-exclude anything that won't physically fit once we know the space,
     // anything whose CONFIRMED lid-open height won't clear an entered
-    // ceiling/shelf limit, and — once a capacity preference is picked —
-    // anything outside that capacity band. Capacity is a stated requirement,
-    // not a nice-to-have: choosing "9kg+" should never surface a 7kg machine,
-    // even as a "closest available" fallback.
+    // ceiling/shelf limit, and — once set — every stated preference (capacity
+    // band, drying, vertical/drum type). These are requirements the user
+    // explicitly chose, not nice-to-haves: picking "vertical" should never
+    // surface a drum machine as a "closest alternative" — it should just say
+    // there's nothing that matches.
     .filter((m) => !(spaceKnown && m.fit === "no") && m.lidClearance !== "no")
-    .filter((m) => !band || (m.wash_kg >= band.min && m.wash_kg <= band.max));
+    .filter((m) => !band || (m.wash_kg >= band.min && m.wash_kg <= band.max))
+    .filter((m) => prefs.type === "any" || m.type === prefs.type)
+    .filter((m) => {
+      if (prefs.dry === "heat_pump") return m.features.includes("heat_pump_dry");
+      if (prefs.dry === "simple") return !!m.dry_kg;
+      return true; // "none" / "any" impose no drying requirement either way
+    });
 
   const scored = candidates.map((m) => {
     let score = 0;
@@ -63,36 +70,23 @@ export function recommend(space, prefs) {
       reasons.push("capacity");
     }
 
+    // Drying and type are hard-filtered above too, so these are just scoring
+    // bonuses + tags now — every candidate here already satisfies whichever
+    // of these preferences was actually set.
     if (prefs.dry === "heat_pump") {
-      if (m.features.includes("heat_pump_dry")) {
-        score += 22;
-        reasons.push("dryHeatPump");
-      } else if (m.dry_kg) {
-        score += 6;
-      } else {
-        score -= 12;
-      }
+      score += 22;
+      reasons.push("dryHeatPump");
     } else if (prefs.dry === "simple") {
-      if (m.dry_kg) {
-        score += 16;
-        reasons.push("dry");
-      } else {
-        score -= 6;
-      }
-    } else if (prefs.dry === "none") {
-      if (!m.dry_kg) {
-        score += 10;
-        reasons.push("noDryBudget");
-      }
+      score += 16;
+      reasons.push("dry");
+    } else if (prefs.dry === "none" && !m.dry_kg) {
+      score += 10;
+      reasons.push("noDryBudget");
     }
 
     if (prefs.type !== "any") {
-      if (m.type === prefs.type) {
-        score += 15;
-        reasons.push("type");
-      } else {
-        score -= 18;
-      }
+      score += 15;
+      reasons.push("type");
     }
 
     // Small price tiebreaker — cheaper nudges ahead when everything else
@@ -131,21 +125,15 @@ export function recommend(space, prefs) {
     }
 
     if (prefs.dry === "heat_pump") {
-      if (m.features.includes("heat_pump_dry")) explain.push({ type: "dryHeatPump" });
-      else explain.push({ type: "dryMismatchHeatPump" });
+      explain.push({ type: "dryHeatPump" });
     } else if (prefs.dry === "simple") {
-      if (m.dry_kg) explain.push({ type: "drySimple" });
-      else explain.push({ type: "dryMismatchSimple" });
+      explain.push({ type: "drySimple" });
     } else if (prefs.dry === "none" && !m.dry_kg) {
       explain.push({ type: "noDryBudget" });
     }
 
     if (prefs.type !== "any") {
-      if (m.type === prefs.type) {
-        explain.push({ type: "typeMatch", params: { type: m.type } });
-      } else {
-        explain.push({ type: "typeMismatch", params: { type: m.type } });
-      }
+      explain.push({ type: "typeMatch", params: { type: m.type } });
     }
 
     if (typeof m.noise_spin_db === "number" && quietThreshold !== null && m.noise_spin_db <= quietThreshold) {
@@ -171,41 +159,19 @@ export function recommend(space, prefs) {
     return { ...m, explain, delta: deltaVsOldMachine(m, space) };
   });
 
-  // If NONE of the shown results actually satisfy a stated preference, the
-  // list is silently falling back to "closest available" rather than truly
-  // matching what was asked for — that's the exact situation that reads as
-  // broken/out-of-sync, so the UI surfaces it as an explicit heads-up
-  // instead of pretending everything lines up. Each check is judged against
-  // the OTHER active preferences too, not capacity/type/dry in isolation —
-  // otherwise a machine that only matches on, say, capacity but is the
-  // wrong type can silently satisfy the "capacity" check and hide the
-  // banner, even though nothing shown actually meets what was asked for
-  // taken together.
-  const capacityOk = (m) => !band || (m.wash_kg >= band.min && m.wash_kg <= band.max);
-  const typeOk = (m) => prefs.type === "any" || m.type === prefs.type;
-  const dryOk = (m) => {
-    if (prefs.dry === "heat_pump") return m.features.includes("heat_pump_dry");
-    if (prefs.dry === "simple") return !!m.dry_kg;
-    return true;
-  };
-
-  const unmet = {
-    capacity: band ? !results.some((m) => capacityOk(m) && typeOk(m) && dryOk(m)) : false,
-    type: prefs.type !== "any" ? !results.some((m) => typeOk(m) && capacityOk(m) && dryOk(m)) : false,
-    dry:
-      prefs.dry === "heat_pump" || prefs.dry === "simple"
-        ? !results.some((m) => dryOk(m) && capacityOk(m) && typeOk(m))
-        : false,
-  };
-
-  // Separate from "unmet preferences" above: these flag when we had to show
-  // at least one result we couldn't fully verify against what was entered —
-  // an unconfirmed lid-open height, or (for a candidate taller than a saved
-  // old machine used as the space reference) a body height we deliberately
-  // didn't hard-exclude on, since that figure isn't a measured clearance —
-  // rather than pretending everything shown was fully checked.
+  // Capacity, type, and drying (when it's an actual requirement — heat-pump
+  // or simple, not just "none") are all hard-filtered above now, so there's
+  // no "closest alternative that doesn't quite match" case left to flag —
+  // either something in `results` satisfies every preference that was set,
+  // or `results` is empty and the UI shows "no machines match" instead.
+  // What's still worth flagging: these next two, which fire when we had to
+  // show at least one result we couldn't fully verify against what was
+  // entered — an unconfirmed lid-open height, or (for a candidate taller
+  // than a saved old machine used as the space reference) a body height we
+  // deliberately didn't hard-exclude on, since that figure isn't a measured
+  // clearance — rather than pretending everything shown was fully checked.
   const lidCaution = results.some((m) => m.lidClearance === "unknown");
   const heightCaution = results.some((m) => m.heightUnverified);
 
-  return { results, spaceKnown, totalCandidates: candidates.length, unmet, lidCaution, heightCaution };
+  return { results, spaceKnown, totalCandidates: candidates.length, lidCaution, heightCaution };
 }

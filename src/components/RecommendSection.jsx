@@ -74,23 +74,6 @@ function explainSentence(t, e) {
       return t("recommend.explain.valuePick", { price: yen(e.params.price) });
     case "premiumPick":
       return t("recommend.explain.premiumPick");
-    case "capacityBelow":
-      return t("recommend.explain.capacityBelow", {
-        kg: e.params.kg,
-        household: t(`recommend.household.${e.params.capacity}`),
-      });
-    case "capacityAbove":
-      return t("recommend.explain.capacityAbove", { kg: e.params.kg });
-    case "dryMismatchHeatPump":
-      return t("recommend.explain.dryMismatchHeatPump");
-    case "dryMismatchSimple":
-      return t("recommend.explain.dryMismatchSimple");
-    case "typeMismatch":
-      return t(
-        e.params.type === "vertical"
-          ? "recommend.explain.typeMismatchVertical"
-          : "recommend.explain.typeMismatchDrum",
-      );
     case "lidFits":
       return t("recommend.explain.lidFits", { mm: e.params.mm });
     case "lidUnknown":
@@ -103,22 +86,6 @@ function explainSentence(t, e) {
 }
 
 
-function unmetMessage(t, prefs, unmet) {
-  const messages = [];
-  if (unmet.capacity) {
-    const key = { solo: "capacitySolo", couple: "capacityCouple", family: "capacityFamily" }[prefs.capacity];
-    messages.push(t("recommend.unmet.capacity", { label: t(`recommend.${key}`) }));
-  }
-  if (unmet.type) {
-    const key = prefs.type === "vertical" ? "typeShortVertical" : "typeShortDrum";
-    messages.push(t("recommend.unmet.type", { label: t(`recommend.${key}`) }));
-  }
-  if (unmet.dry) {
-    messages.push(t("recommend.unmet.dry"));
-  }
-  return messages;
-}
-
 export default function RecommendSection({ space }) {
   const { t, i18n } = useTranslation();
   const isJa = i18n.language?.startsWith("ja");
@@ -127,13 +94,9 @@ export default function RecommendSection({ space }) {
 
   const setPref = (key) => (val) => setPrefs((p) => ({ ...p, [key]: val }));
 
-  const { results, unmet, lidCaution, heightCaution } = useMemo(
-    () => recommend(space, prefs),
-    [space, prefs],
-  );
+  const { results, lidCaution, heightCaution } = useMemo(() => recommend(space, prefs), [space, prefs]);
   const shown = showAll ? results : results.slice(0, TOP_SHOWN);
   const hasMore = results.length > TOP_SHOWN;
-  const unmetMessages = useMemo(() => unmetMessage(t, prefs, unmet), [t, prefs, unmet]);
 
   const capacityOptions = [
     { val: "solo", label: t("recommend.capacitySolo") },
@@ -180,16 +143,6 @@ export default function RecommendSection({ space }) {
             {t("recommend.spaceHint")}
           </p>
         </div>
-
-        {results.length > 0 && unmetMessages.length > 0 && (
-          <div className="mt-4 flex flex-col gap-1.5 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-3">
-            {unmetMessages.map((msg) => (
-              <p key={msg} className="text-xs leading-relaxed font-medium text-amber-700">
-                {msg}
-              </p>
-            ))}
-          </div>
-        )}
 
         {results.length > 0 && lidCaution && (
           <p className="mt-4 rounded-2xl border border-cream-200 bg-cream-100 px-4 py-2.5 text-xs leading-relaxed text-ink-500">
