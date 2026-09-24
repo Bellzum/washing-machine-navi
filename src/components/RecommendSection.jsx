@@ -253,7 +253,9 @@ export default function RecommendSection({ space }) {
 
                 <div className="flex flex-wrap gap-1.5">
                   <SpecChip label={t("specs.noiseSpin")} value={t("specs.dbValue", { db: m.noise_spin_db })} />
-                  <SpecChip label={t("specs.power")} value={t("specs.whValue", { wh: m.power_wash_wh })} />
+                  {m.power_wash_wh != null && (
+                    <SpecChip label={t("specs.power")} value={t("specs.whValue", { wh: m.power_wash_wh })} />
+                  )}
                   <SpecChip label={t("specs.water")} value={t("specs.lValue", { l: m.water_l })} />
                   <SpecChip label={t("specs.time")} value={t("specs.minValue", { min: m.time_min })} />
                   <SpecChip label={t("specs.weight")} value={t("specs.kgValue", { kg: m.weight_kg })} />

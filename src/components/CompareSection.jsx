@@ -190,10 +190,12 @@ export default function CompareSection({ space }) {
                               label={t("specs.noiseSpin")}
                               value={t("specs.dbValue", { db: m.noise_spin_db })}
                             />
-                            <SpecChip
-                              label={t("specs.power")}
-                              value={t("specs.whValue", { wh: m.power_wash_wh })}
-                            />
+                            {m.power_wash_wh != null && (
+                              <SpecChip
+                                label={t("specs.power")}
+                                value={t("specs.whValue", { wh: m.power_wash_wh })}
+                              />
+                            )}
                             {m.power_dry_wh && (
                               <SpecChip
                                 label={t("specs.powerDry")}
