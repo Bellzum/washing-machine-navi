@@ -1,4 +1,5 @@
 import { useTranslation } from "react-i18next";
+import WashingMachineIllustration from "./WashingMachineIllustration.jsx";
 
 export default function Hero() {
   const { t } = useTranslation();
@@ -23,7 +24,9 @@ export default function Hero() {
       />
 
       <div className="relative mx-auto max-w-3xl text-center">
-        <span className="inline-block rounded-full bg-sage-100 px-3 py-1 text-xs font-medium text-sage-600">
+        <WashingMachineIllustration className="mx-auto h-36 w-auto sm:h-44" />
+
+        <span className="mt-4 inline-block rounded-full bg-sage-100 px-3 py-1 text-xs font-medium text-sage-600">
           🇯🇵 Japan apartment edition
         </span>
         <h1 className="mt-4 font-display text-3xl font-bold text-ink-800 sm:text-4xl">
